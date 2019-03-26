@@ -1,37 +1,19 @@
-## Welcome to GitHub Pages
+## StudyPal
+StudyPal is an Android application targeted for people who wants to increase their productivity, strengthen their study habits by video chatting with others while studying, streaming their study sessions, and sharing them with their study pals all over the world. The concept of the app is the inspired by the "Study with me" videos on YouTube and other video sharing platforms.
 
-You can use the [editor on GitHub](https://github.com/valkyrie7/StudyPal/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+### Why StudyPal
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+With the internet, new ways of studying have also emerged. There are thousands of productivity applications in the Google Play Store or Apple’s App Store. Many students prefer studying in a library since libraries provide a motivating environment. However, some students may prefer the comfort of a home and still wish for the productivity boost the library provides. To meet the gap, the video concept of “Study with Me” has emerged. These videos appear on the video upload websites like YouTube or streaming websites like Twitch. A “Study with Me” video consists of a person studying real time sometimes with an additional background music. Some videos on Youtube have over 2 million views [Access from here](https://youtu.be/dmDbesougG0) and some content creators have more than 400,000 subscribers that follow their frequent uploads [Access from here](https://www.youtube.com/channel/UCMKn6ul1eu4iJ5bZytArywg). 
 
-### Markdown
+Another concept that has emerged with the need to find study motivation and inspiration is to share class notes, study environment, studying tips, or any productivity related material on a social media. Especially, on Instagram and Tumblr, these types of posts have a multitude of followers. On Instagram, there are currently 12 million posts that are using the hashtag #study, 3.4 million posts that are using the hashtag #studygram. The idea behind traditional study groups are extending to the internet and surpasses the original concept. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+These newly emerged concepts show us the demand for online study communities. Moreover, according to a study focusing on the live streaming phenomenon in China, people are more interested and engaged in live streams about the personal experiences of strangers than they were in the experiences of their friends, live events or civic content. Another finding is that reward-based systems facilitate community building [You Watch, You Give, and You Engage: A Study ofLive Streaming Practices in China](https://arxiv.org/ftp/arxiv/papers/1803/1803.06032.pdf). We aim for a strong and helpful study community and motivate individual users with gamification [How gamification motivates](https://www.sciencedirect.com/science/article/pii/S074756321630855X). 
 
-```markdown
-Syntax highlighted code block
+Although, there are many productivity applications for many personal development goals such as time management, habit trackers, application blockers, to-do lists. There are no dedicated platform for students who want to connect with other students for mutual assistance, motivation and inspiration.
 
-# Header 1
-## Header 2
-### Header 3
+We will offer to students a platform to engage with other students to motivate themselves to study. StudyPal is not a project tracker, it is not a social media, it is not a timer, it is not a video sharing or streaming application. StudyPal combines all these features to provide a safe and motivating platform to help students who want to be more productive.
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/valkyrie7/StudyPal/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+**Reports**
+[Specifications](https://drive.google.com/open?id=1SDRGIMi04mRNCzZsCtuva7zFMcIaDwx-YMCysIjoSOE)
+[Analysis Report](https://drive.google.com/open?id=0B6Q-bDkHi9hdM0ItVXBpZU1uQjFlNk1vNDh1TzJJbmNZeENZ)
