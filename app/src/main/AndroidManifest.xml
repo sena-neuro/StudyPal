@@ -11,7 +11,7 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".homePageActivity"
-                android:label="title_activity_home_page"
+                android:label="@string/title_home"
                 android:parentActivityName=".MainActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"

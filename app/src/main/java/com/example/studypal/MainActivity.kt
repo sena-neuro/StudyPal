@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         auth = FirebaseAuth.getInstance()
         google_sign_in_button.setOnClickListener(this)
         email_sign_in_button.setOnClickListener(this)
+        signUpButton.setOnClickListener(this)
+
+
 
     }
     // [START on_start_check_user]
@@ -116,6 +119,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             R.id.google_sign_in_button -> signIn()
             R.id.email_sign_in_button -> {
                 val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
+            R.id.signUpButton -> {
+                val intent = Intent(this, SignUpActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
                 startActivity(intent)
             }

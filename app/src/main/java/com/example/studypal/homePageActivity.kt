@@ -17,7 +17,7 @@ class homePageActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                textMessage.setText(R.string.title_home)
+                textMessage.setText("Home")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
@@ -36,8 +36,6 @@ class homePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
-        textMessage = findViewById(R.id.message)
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         val user = FirebaseAuth.getInstance().currentUser
