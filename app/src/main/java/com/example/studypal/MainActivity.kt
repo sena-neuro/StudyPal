@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         // Build a GoogleSignInClient with the options specified by gso.
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
-        sign_in_button.setOnClickListener(this)
-
+        google_sign_in_button.setOnClickListener(this)
+        email_sign_in_button.setOnClickListener(this)
 
     }
     // [START on_start_check_user]
@@ -113,7 +113,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     override fun onClick(v: View) {
         val i = v.id
         when (i) {
-            R.id.sign_in_button -> signIn()
+            R.id.google_sign_in_button -> signIn()
+            R.id.email_sign_in_button -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
         }
     }
     companion object {
