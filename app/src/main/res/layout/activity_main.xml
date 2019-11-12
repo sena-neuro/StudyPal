@@ -21,12 +21,12 @@
             android:text="LOG IN"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/LoginButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginBottom="148dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"/>
     <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
+            android:id="@+id/googleSignInButton"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
@@ -34,14 +34,14 @@
             android:layout_marginBottom="25dp"
             android:layout_marginTop="8dp"
             app:layout_constraintVertical_bias="0.909"
-            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintBottom_toTopOf="@+id/button2"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintBottom_toTopOf="@+id/signUpButton"/>
     <Button
             android:text="SIGN UP"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button2" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/signUpButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/button"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/LoginButton"
             android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView"
             app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.866"/>
 
