@@ -18,10 +18,10 @@
             android:textSize="45sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.394"
+            app:layout_constraintHorizontal_bias="0.429"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.166" />
+            app:layout_constraintVertical_bias="0.17"/>
 
     <Button
             android:text="SIGN UP"
@@ -29,9 +29,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/signUpButton" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/email_sign_in_button"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.866"/>
+            android:layout_marginTop="44dp" app:layout_constraintTop_toBottomOf="@+id/google_sign_in_button"
+            app:layout_constraintHorizontal_bias="0.0"/>
 
 
     <Button
@@ -46,7 +45,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/signUpButton"
             app:layout_constraintTop_toBottomOf="@+id/signUpButton"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.149"/>
 
 
     <com.google.android.gms.common.SignInButton
@@ -56,7 +55,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintHorizontal_bias="0.433" app:layout_constraintVertical_bias="0.204"/>
 
             android:id="@+id/googleSignInButton"
             android:layout_width="wrap_content"

@@ -43,8 +43,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         email_sign_in_button.setOnClickListener(this)
         signUpButton.setOnClickListener(this)
 
-
-
     }
     // [START on_start_check_user]
     public override fun onStart() {
