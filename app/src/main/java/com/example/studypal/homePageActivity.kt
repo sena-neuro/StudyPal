@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_home_page.*
 
-class homePageActivity : AppCompatActivity() {
-
+class homePageActivity : AppCompatActivity(), View.OnClickListener {
+    private var db: FirebaseFirestore?=null
+    private var userData:User?=null
     private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -39,22 +42,34 @@ class homePageActivity : AppCompatActivity() {
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         val user = FirebaseAuth.getInstance().currentUser
+        db = FirebaseFirestore.getInstance()
         user?.let {
-            // Name, email address, and profile photo Url
-            val name = user.displayName
-            val email = user.email
-            val photoUrl = user.photoUrl
-
-            // Check if user's email is verified
-            val emailVerified = user.isEmailVerified
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getToken() instead.
             val uid = user.uid
-            val welc_text = "Welcome, $name"
+            // Name, email address, and profile photo Url
+            if (user.getProviderId().equals("google.com")) {
+                val name = user.displayName
+            }
+            else{
+                val docRef = db!!.collection("users").document(uid)
+                docRef.get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+                            userData = document.toObject(User::class.java)
+
+                        } else {
+                            Log.d(TAG, "No such document")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d(TAG, "get failed with ", exception)
+                    }
+            }
+
+            val welc_text = "Welcome,${userData?.username}"
             welcomeText.text = welc_text
         }
+        sign_out_button.setOnClickListener(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -75,8 +90,19 @@ class homePageActivity : AppCompatActivity() {
         startActivity(intent)
         super.onBackPressed()
     }
+    override fun onClick(v:View){
+        val i = v.id
+        when (i) {
+            R.id.sign_out_button -> {
+                signOut()
+            }
+        }
+    }
     private fun signOut() {
         // sign out
         FirebaseAuth.getInstance().signOut()
+    }
+    companion object {
+        private const val TAG = "homePageActivity"
     }
 }
