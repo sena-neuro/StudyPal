@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "977955202582-4qo8u3h4s5ogn0o4infidijffbjaiifs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studypal",
+            "certificate_hash": "6e333e41b1b5750329b357a1aea82e25a0cdab0e"
+          }
+        },
+        {
           "client_id": "977955202582-stn37ea2m0op3moiev7dr4t54tbmb0dj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,7 +44,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "977955202582-ufsk9oqp1subr5gt1hioc1l6p5nsvf7v.apps.googleusercontent.com",
+              "client_id": "977955202582-5ml9vjf3j4joh0etcstlit4dl1450n27.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

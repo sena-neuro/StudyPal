@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseUser
@@ -40,7 +39,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         // Build a GoogleSignInClient with the options specified by gso.
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
-        googleSignInButton.setOnClickListener(this)
+        google_sign_in_button.setOnClickListener(this)
+        email_sign_in_button.setOnClickListener(this)
         signUpButton.setOnClickListener(this)
 
 
@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    //Snackbar.make(main_layout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
                     updateUI(null)
                 }
             }
@@ -115,7 +116,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     override fun onClick(v: View) {
         val i = v.id
         when (i) {
-            R.id.googleSignInButton -> signIn()
+            R.id.google_sign_in_button -> signIn()
+            R.id.email_sign_in_button -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
             R.id.signUpButton -> {
                 val intent = Intent(this, SignUpActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP

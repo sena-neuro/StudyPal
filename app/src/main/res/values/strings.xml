@@ -14,4 +14,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="password_confirm_failed">"Passwords do not match"</string>
+    <string name="password_hint">Password</string>
+    <string name="email_hint">E-mail</string>
+    <string name="sign_up_button_text">Sign Up</string>
 </resources>
