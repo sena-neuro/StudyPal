@@ -21,4 +21,7 @@
     <string name="repeat_password">Repeat Password</string>
     <string name="birth_date">Birth Date</string>
     <string name="user_name">User Name</string>
+    <string name="profile">Profile</string>
+    <string name="social">Social</string>
+    <string name="settings">Settings</string>
 </resources>

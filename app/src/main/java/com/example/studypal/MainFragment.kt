@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavArgs
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
@@ -26,8 +29,9 @@ class MainFragment : Fragment(), View.OnClickListener {
     private lateinit var googleSignInClient: GoogleSignInClient
     // Initialize Firebase Auth
     private lateinit var auth: FirebaseAuth
-
+    private var provider: String? =null
     private lateinit var navController: NavController
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +60,15 @@ class MainFragment : Fragment(), View.OnClickListener {
         signUpButton.setOnClickListener(this)
 
         // Sign-out from googlr too
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val args = arguments?.let { MainFragmentArgs.fromBundle(it) }
+        Log.d(TAG, args!!.action)
+        if( args.action.equals("signOut")){
+            signOut()
+        }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -94,7 +107,6 @@ class MainFragment : Fragment(), View.OnClickListener {
         // Firebase sign out
         auth.signOut()
 
-        Log.d(TAG, "GoogleSignOut")
         // Google sign out
         googleSignInClient.signOut()
     }

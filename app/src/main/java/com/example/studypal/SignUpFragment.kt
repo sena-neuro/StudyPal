@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import java.util.*
+import com.google.firebase.auth.FirebaseAuthException
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -22,7 +25,7 @@ import java.util.*
 class SignUpFragment : Fragment(), View.OnClickListener {
     private var mAuth: FirebaseAuth? = null
     private var db: FirebaseFirestore?=null
-    var navController: NavController? = null
+    private var navController:NavController?=null
 
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR)
@@ -41,12 +44,16 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         register_button.setOnClickListener(this)
         birthDate.setOnClickListener(this)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+    }
+    override fun onStart() {
+        super.onStart()
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
     }
     fun showDatePicker(view: View) {
         val dpd = context?.let {
@@ -69,27 +76,28 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         c.set(year,month,day)
         dpd?.show()
     }
-    private fun register()
+    private fun register(email:String, password:String)
     {
-        if(validate()) {
-            mAuth!!.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
-            .addOnCompleteListener{ task ->
-                if (task.isSuccessful) {
-                    // Sign in: success
-                    // update UI for current User
-                    val user = mAuth!!.currentUser
-                    val newUser = User(userName.text.toString(),
-                        email.text.toString(),
-                        c.time,
-                        phoneNumber.text.toString())
-                    db!!.collection("users").document(user!!.uid).set(newUser)
-                    Log.d(TAG,newUser.toString())
-                    navController!!.navigate(R.id.action_signInFragment_to_homeFragment)
-                }
-                else {
-                    Log.d(TAG, "Failed to register")
-                    Toast.makeText(activity,   "Failed to register", Toast.LENGTH_LONG).show()
-                }
+        if(!validate()) {
+            return
+        }
+        mAuth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d(TAG, "task success")
+                val user = mAuth!!.currentUser
+                val newUser = User(userName.text.toString(),
+                    email,
+                    c.time,
+                    phoneNumber.text.toString())
+                db!!.collection("users").document(user!!.uid).set(newUser)
+                Log.d(TAG,newUser.toString())
+                navController!!.navigate(R.id.action_signUpFragment_to_homeFragment)
+            }
+            else {
+                Log.d(TAG, "Failed to register")
+                Toast.makeText(activity,   "Failed to register", Toast.LENGTH_LONG).show()
+                val e = it.getException() as FirebaseAuthException
+                Log.e(TAG, "Failed Register" ,e)
             }
         }
     }
@@ -126,7 +134,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         val i = v!!.id
         when (i) {
-            R.id.register_button -> register()
+            R.id.register_button -> register(email.text.toString(), password.text.toString())
             R.id.birthDate -> showDatePicker(v)
         }
     }

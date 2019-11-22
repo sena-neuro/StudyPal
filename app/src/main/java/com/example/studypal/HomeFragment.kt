@@ -1,6 +1,7 @@
 package com.example.studypal
 
 
+import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -20,69 +22,41 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * A simple [Fragment] subclass.
  */
 class HomeFragment : Fragment(), View.OnClickListener {
-    private var userData:User?=null
-    private lateinit var textMessage: TextView
     private lateinit var navController: NavController
     val db = FirebaseFirestore.getInstance()
     private val fuser = FirebaseAuth.getInstance().currentUser
 
 
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                textMessage.setText("Home")
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_dashboard -> {
-                textMessage.setText(R.string.title_dashboard)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                textMessage.setText(R.string.title_notifications)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val navView: BottomNavigationView = nav_view
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("onStart", "onstart")
+        getUserData(fuser!!.uid)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        userData = getUserData(fuser!!.uid)
-        val welc_text:String
-        if (fuser.providerId.equals("google.com")) {
-            val name = fuser.displayName.toString()
-            welc_text = "Welcome,$name"
-        }
-        else{
-            welc_text = "Welcome,${userData?.username}"
-
-        }
-        Toast.makeText(context, welc_text, Toast.LENGTH_SHORT).show()
-        welcomeText.text = welc_text
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    private fun getUserData(uid:String):User?{
+    private fun getUserData(uid:String){
+        Log.d(TAG, "inside getUserData")
         val docRef = db.collection("users").document(uid)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                    userData = document.toObject(User::class.java)
+                    var userData = document.toObject(User::class.java)
+                    if (userData != null) {
+                        Log.d(TAG,userData.toString())
+                    }
                 } else {
                     Log.d(TAG, "No such document")
                 }
@@ -90,7 +64,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         .addOnFailureListener { exception ->
             Log.d(TAG, "get failed with ", exception)
         }
-        return userData
     }
     private fun signOut() {
         // Sign Out
@@ -100,9 +73,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onClick(v:View){
         val i = v.id
         when (i) {
-            R.id.sign_out_button -> {
+            /*R.id.sign_out_button -> {
                 signOut()
-            }
+                val action = HomeFragmentDirections.actionHomeFragmentToMainFragment("signOut")
+                navController.navigate(action)
+            }*/
         }
     }
     companion object {

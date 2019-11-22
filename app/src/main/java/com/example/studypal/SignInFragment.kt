@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.studypal.R
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 
 class SignInFragment : Fragment(), View.OnClickListener {
 
@@ -30,12 +30,13 @@ class SignInFragment : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sign_in_button.setOnClickListener(this)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+        auth = FirebaseAuth.getInstance()
 
     }
 
@@ -51,6 +52,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     navController!!.navigate(R.id.action_signInFragment_to_homeFragment)
+
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -90,6 +92,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
         val i = v!!.id
         when (i) {
             R.id.sign_in_button -> signIn(fieldEmail.text.toString(), fieldPassword.text.toString())
+
         }
     }
     companion object {
