@@ -58,6 +58,9 @@
                 app:destination="@id/mainFragment"
                 app:popUpTo="@+id/mainFragment"
                 app:popUpToInclusive="true" />
+        <action
+                android:id="@+id/action_navigation_home_to_streamSettingsFragment"
+                app:destination="@id/streamSettingsFragment" />
     </fragment>
     <fragment
             android:id="@+id/navigation_profile"
@@ -74,4 +77,9 @@
             android:name="com.example.studypal.SocialFragment"
             android:label="fragment_social"
             tools:layout="@layout/fragment_social" />
+    <fragment
+            android:id="@+id/streamSettingsFragment"
+            android:name="com.example.studypal.StreamSettingsFragment"
+            android:label="fragment_stream_settings"
+            tools:layout="@layout/fragment_stream_settings" />
 </navigation>

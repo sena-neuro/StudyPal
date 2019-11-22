@@ -30,6 +30,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+        streamSettingsButton.setOnClickListener(this)
     }
 
     override fun onStart() {
@@ -78,6 +79,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToMainFragment("signOut")
                 navController.navigate(action)
             }*/
+            R.id.streamSettingsButton -> navController.navigate(R.id.action_navigation_home_to_streamSettingsFragment)
         }
     }
     companion object {
