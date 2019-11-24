@@ -19,7 +19,7 @@
         <action
                 android:id="@+id/action_mainFragment_to_homeFragment"
                 app:destination="@id/navigation_home"
-                app:popUpTo="@+id/mainFragment"
+                app:popUpTo="@id/mainFragment"
                 app:popUpToInclusive="true" />
         <argument
                 android:name="action"
@@ -45,7 +45,7 @@
         <action
                 android:id="@+id/action_signUpFragment_to_homeFragment"
                 app:destination="@id/navigation_home"
-                app:popUpTo="@id/mainFragment"
+                app:popUpTo="@id/navigation_home"
                 app:popUpToInclusive="true"/>
     </fragment>
     <fragment
@@ -54,13 +54,17 @@
             android:label="fragment_home"
             tools:layout="@layout/fragment_home" >
         <action
-                android:id="@+id/action_homeFragment_to_mainFragment"
-                app:destination="@id/mainFragment"
-                app:popUpTo="@+id/mainFragment"
-                app:popUpToInclusive="true" />
-        <action
                 android:id="@+id/action_navigation_home_to_streamSettingsFragment"
                 app:destination="@id/streamSettingsFragment" />
+        <action
+                android:id="@+id/action_navigation_home_to_mainFragment"
+                app:destination="@id/mainFragment"
+                app:popUpTo="@+id/mainFragment"
+                app:popUpToInclusive="true">
+            <argument
+                    android:name="action"
+                    android:defaultValue="none" />
+        </action>
     </fragment>
     <fragment
             android:id="@+id/navigation_profile"

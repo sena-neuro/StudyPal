@@ -12,13 +12,14 @@ import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 class SignInFragment : Fragment(), View.OnClickListener {
 
     private lateinit var auth: FirebaseAuth
     var navController: NavController? = null
-
+    val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,7 +52,23 @@ class SignInFragment : Fragment(), View.OnClickListener {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
-                    navController!!.navigate(R.id.action_signInFragment_to_homeFragment)
+                    val docRef = db.collection("users").document(auth.uid!!)
+                    docRef.get()
+                        .addOnSuccessListener { document ->
+                            if (document != null) {
+                                Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+                                var userData = document.toObject(User::class.java)
+                                navController!!.navigate(R.id.action_signInFragment_to_homeFragment)
+                                if (userData != null) {
+                                    Log.d(TAG,userData.toString())
+                                }
+                            } else {
+                                Log.d(TAG, "No such document")
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.d(TAG, "get failed with ", exception)
+                        }
 
                 } else {
                     // If sign in fails, display a message to the user.
@@ -87,7 +104,6 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
         return valid
     }
-
     override fun onClick(v: View?) {
         val i = v!!.id
         when (i) {
