@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StreamSettingsFragment">
+    tools:context=".SoloSessionSettingsFragment">
 
     <Switch
         android:id="@+id/timerSwitch"
@@ -41,16 +41,6 @@
         app:layout_constraintTop_toBottomOf="@+id/focusReminderSwitch" />
 
     <Switch
-        android:id="@+id/chatOnlyAsksSwitch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Chat/Only asks"
-        app:layout_constraintEnd_toEndOf="@+id/backgroundSoundSwitch"
-        app:layout_constraintStart_toStartOf="@+id/backgroundSoundSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/backgroundSoundSwitch" />
-
-    <Switch
         android:id="@+id/backgroundSoundSwitch"
         android:layout_width="220dp"
         android:layout_height="27dp"
@@ -60,16 +50,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/muteSwitch"
         app:layout_constraintTop_toBottomOf="@+id/muteSwitch" />
-
-    <Switch
-        android:id="@+id/showNoOfPalsSwitch"
-        android:layout_width="0dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="24dp"
-        android:text="Show # of pals"
-        app:layout_constraintEnd_toEndOf="@+id/chatOnlyAsksSwitch"
-        app:layout_constraintStart_toStartOf="@+id/chatOnlyAsksSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/chatOnlyAsksSwitch" />
 
     <EditText
         android:id="@+id/studyTimeMin"
@@ -96,14 +76,14 @@
         app:layout_constraintTop_toBottomOf="@+id/studyTimeMin" />
 
     <Button
-        android:id="@+id/startStreamButton"
+        android:id="@+id/startSoloSessionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="START SESSION"
-        app:layout_constraintEnd_toEndOf="@+id/showNoOfPalsSwitch"
+        android:layout_marginTop="68dp"
+        android:text="START SOLO SESSION"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundSoundSwitch"
         app:layout_constraintHorizontal_bias="0.434"
-        app:layout_constraintStart_toStartOf="@+id/showNoOfPalsSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/showNoOfPalsSwitch" />
+        app:layout_constraintStart_toStartOf="@+id/backgroundSoundSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/backgroundSoundSwitch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

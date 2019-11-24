@@ -61,6 +61,9 @@
         <action
                 android:id="@+id/action_navigation_home_to_streamSettingsFragment"
                 app:destination="@id/streamSettingsFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_soloSessionSetingsFragment"
+            app:destination="@id/soloSessionSetingsFragment" />
     </fragment>
     <fragment
             android:id="@+id/navigation_profile"
@@ -81,5 +84,28 @@
             android:id="@+id/streamSettingsFragment"
             android:name="com.example.studypal.StreamSettingsFragment"
             android:label="fragment_stream_settings"
-            tools:layout="@layout/fragment_stream_settings" />
+            tools:layout="@layout/fragment_stream_settings" >
+        <action
+            android:id="@+id/action_streamSettingsFragment_to_streamSessionFragment"
+            app:destination="@id/streamSessionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/soloSessionSetingsFragment"
+        android:name="com.example.studypal.SoloSessionSettingsFragment"
+        android:label="fragment_solo_session_setings"
+        tools:layout="@layout/fragment_solo_session_setings" >
+        <action
+            android:id="@+id/action_soloSessionSetingsFragment_to_soloSessionFragment"
+            app:destination="@id/soloSessionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/streamSessionFragment"
+        android:name="com.example.studypal.StreamSessionFragment"
+        android:label="fragment_stream_session"
+        tools:layout="@layout/fragment_stream_session" />
+    <fragment
+        android:id="@+id/soloSessionFragment"
+        android:name="com.example.studypal.SoloSessionFragment"
+        android:label="fragment_solo_session"
+        tools:layout="@layout/fragment_solo_session" />
 </navigation>
