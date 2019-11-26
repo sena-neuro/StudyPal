@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_navigation_home_to_soloSessionSetingsFragment"
             app:destination="@id/soloSessionSetingsFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_pairWithPalSettingsFragment52"
+            app:destination="@id/pairWithPalSettingsFragment" />
     </fragment>
     <fragment
             android:id="@+id/navigation_profile"
@@ -108,4 +111,18 @@
         android:name="com.example.studypal.SoloSessionFragment"
         android:label="fragment_solo_session"
         tools:layout="@layout/fragment_solo_session" />
+    <fragment
+        android:id="@+id/pairWithPalSettingsFragment"
+        android:name="com.example.studypal.pairWithPalSettingsFragment"
+        android:label="fragment_pair_with_pal_settings"
+        tools:layout="@layout/fragment_pair_with_pal_settings" >
+        <action
+            android:id="@+id/action_pairWithPalSettingsFragment_to_pairWithPalFragment3"
+            app:destination="@id/pairWithPalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pairWithPalFragment"
+        android:name="com.example.studypal.pairWithPalFragment"
+        android:label="fragment_pair_with_pal"
+        tools:layout="@layout/fragment_pair_with_pal" />
 </navigation>

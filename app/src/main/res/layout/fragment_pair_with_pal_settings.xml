@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SoloSessionSettingsFragment">
+    tools:context=".pairWithPalSettingsFragment">
 
     <Switch
         android:id="@+id/timerSwitchp"
@@ -76,11 +76,11 @@
         app:layout_constraintTop_toBottomOf="@+id/studyTimeMin" />
 
     <Button
-        android:id="@+id/startSoloSessionButton"
+        android:id="@+id/pairWithPalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
-        android:text="START SOLO SESSION"
+        android:text="PAIR WITH A PAL"
         app:layout_constraintEnd_toEndOf="@+id/backgroundSoundSwitch"
         app:layout_constraintHorizontal_bias="0.434"
         app:layout_constraintStart_toStartOf="@+id/backgroundSoundSwitch"

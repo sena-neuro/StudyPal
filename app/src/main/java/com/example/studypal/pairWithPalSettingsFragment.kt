@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_pair_with_pal_settings.*
+import kotlinx.android.synthetic.main.fragment_solo_session_setings.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class PairWithPalSettingsFragment : Fragment(),View.OnClickListener {
+class pairWithPalSettingsFragment : Fragment(),View.OnClickListener {
+
     private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -21,7 +23,6 @@ class PairWithPalSettingsFragment : Fragment(),View.OnClickListener {
         navController = Navigation.findNavController(view)
         pairWithPalButton.setOnClickListener(this)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,13 +32,10 @@ class PairWithPalSettingsFragment : Fragment(),View.OnClickListener {
     }
     override fun onClick(p0: View?) {
         when (p0!!.id) {
-            R.id.pairWithPalButton -> navController.navigate(R.id.action_pairWithPalSettingsFragment_to_pairWithPalFragment)
+            R.id.pairWithPalButton -> navController.navigate(R.id.action_pairWithPalSettingsFragment_to_pairWithPalFragment3)
 
         }
+    }
 
 
 }
-
-
-    }
-
