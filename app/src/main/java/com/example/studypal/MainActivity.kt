@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         bottom_navigation.visibility = View.GONE
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setupBottomNavMenu(navController)
-        navController!!.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             if(destination.id == R.id.navigation_home) {
                 bottom_navigation.visibility = View.VISIBLE
             }
