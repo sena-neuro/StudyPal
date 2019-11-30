@@ -13,13 +13,13 @@ import org.webrtc.VideoCapturer
 
 class RTCClient(
     context: Application,
-    private val localVideoOutput: SurfaceViewRenderer) {
+    private val localVideoOutput: SurfaceViewRenderer?) {
 
     private val rootEglBase: EglBase = EglBase.create()
 
     init {
         initPeerConnectionFactory(context)
-        initSurfaceView(localVideoOutput)
+        initSurfaceView()
     }
 
     private val peerConnectionFactory by lazy { buildPeerConnectionFactory() }
@@ -56,15 +56,14 @@ class RTCClient(
             } ?: throw IllegalStateException()
         }
 
-    private fun initSurfaceView(view: SurfaceViewRenderer) = view.run {
-        setMirror(true)
-        setEnableHardwareScaler(true)
-        init(rootEglBase.eglBaseContext, null)
+    private fun initSurfaceView() {
+        localVideoOutput?.init(rootEglBase.eglBaseContext, null)
+        localVideoOutput?.setZOrderMediaOverlay(true)
     }
 
     fun startLocalVideoCapture() {
         val surfaceTextureHelper = SurfaceTextureHelper.create(Thread.currentThread().name, rootEglBase.eglBaseContext)
-        (videoCapturer as VideoCapturer).initialize(surfaceTextureHelper, localVideoOutput.context, localVideoSource.capturerObserver)
+        (videoCapturer as VideoCapturer).initialize(surfaceTextureHelper, localVideoOutput!!.context, localVideoSource.capturerObserver)
 
         // width, height, frame per second
         videoCapturer.startCapture(320, 240, 60)
