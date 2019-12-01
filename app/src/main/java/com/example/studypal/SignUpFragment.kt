@@ -16,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import java.util.*
 import com.google.firebase.auth.FirebaseAuthException
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -55,11 +54,11 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
     }
-    fun showDatePicker(view: View) {
+    fun showDatePicker() {
         val dpd = context?.let {
             DatePickerDialog(
                 it,
-                DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in Toast
                     Toast.makeText(
                         activity,
@@ -135,7 +134,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
         val i = v!!.id
         when (i) {
             R.id.register_button -> register(email.text.toString(), password.text.toString())
-            R.id.birthDate -> showDatePicker(v)
+            R.id.birthDate -> showDatePicker()
         }
     }
     companion object {

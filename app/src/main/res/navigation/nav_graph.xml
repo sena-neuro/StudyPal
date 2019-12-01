@@ -85,5 +85,14 @@
             android:id="@+id/streamSettingsFragment"
             android:name="com.example.studypal.StreamSettingsFragment"
             android:label="fragment_stream_settings"
-            tools:layout="@layout/fragment_stream_settings" />
+            tools:layout="@layout/fragment_stream_settings" >
+        <action
+                android:id="@+id/action_streamSettingsFragment_to_soloSessionFragment"
+                app:destination="@id/soloSessionFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/soloSessionFragment"
+            android:name="com.example.studypal.SoloSessionFragment"
+            android:label="fragment_solo_session"
+            tools:layout="@layout/fragment_solo_session" />
 </navigation>
