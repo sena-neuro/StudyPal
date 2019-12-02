@@ -31,4 +31,5 @@
     <string name="start_session">Start Session</string>
     <string name="break_text">In Break</string>
     <string name="session_text">In Session</string>
+    <string name="timer_text">%d:%d</string>
 </resources>

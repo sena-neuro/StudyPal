@@ -42,15 +42,12 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_solo_session, container, false)
     }
-
-    override fun onResume() {
-        super.onResume()
-        createTimers()
-        sessionCountDownTimer.start()
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkCameraPermission()
+        createTimers()
+        sessionCountDownTimer.start()
+
     }
     private fun createTimers(){
         sessionCountDownTimer = object : CountDownTimer(sessionMins*60*100,1000){
@@ -58,8 +55,9 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
                 var minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
                 var secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
                         TimeUnit.MINUTES.toSeconds(minsLeft)
-                timeLeftTextWiev.setText("$minsLeft:$secondsLeft")
-                Log.d("Timer", "$minsLeft:$secondsLeft")
+                var timeLeftText:String? = String.format(resources.getString(R.string.timer_text), minsLeft, secondsLeft)
+                timeLeftTextWiev.text = timeLeftText
+
             }
             override fun onFinish() {
                 Log.d("timer", "timer finished decrement counter and reset values")
@@ -74,11 +72,11 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         }
         breakCountDownTimer = object : CountDownTimer(breakMins*60*100,1000){
             override fun onTick(milisUntilFinished: Long) {
-                var minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
-                var secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
+                val minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
+                val secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
                         TimeUnit.MINUTES.toSeconds(minsLeft)
-                timeLeftTextWiev.setText("$minsLeft:$secondsLeft")
-                Log.d("Timer", "$minsLeft:$secondsLeft")
+                val timeLeftText:String? = String.format(resources.getString(R.string.timer_text), minsLeft, secondsLeft)
+                timeLeftTextWiev.text = timeLeftText
             }
             override fun onFinish() {
                 Log.d("timer", " break timer finished decrement counter and reset values")
@@ -96,12 +94,16 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             onCameraPermissionGranted()
         }
     }
+    override fun onPause() {
+        sessionCountDownTimer.cancel()
+        breakCountDownTimer.cancel()
+        super.onPause()
+    }
 
     private fun onCameraPermissionGranted() {
         rtcClient = RTCClient(activity!!.application, local_view)
         rtcClient.startLocalVideoCapture()
     }
-
     private fun requestCameraPermission(dialogShown: Boolean = false) {
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, CAMERA_PERMISSION) && !dialogShown) {
@@ -110,7 +112,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             ActivityCompat.requestPermissions(activity!!, arrayOf(CAMERA_PERMISSION), CAMERA_PERMISSION_REQUEST_CODE)
         }
     }
-
     private fun showPermissionRationaleDialog() {
         AlertDialog.Builder(context!!)
             .setTitle("Camera Permission Required")
@@ -147,8 +148,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1
         private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
     }
-
-
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.closeCallButton -> closeCall()
