@@ -28,17 +28,15 @@ class MainActivity : AppCompatActivity(){
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setupBottomNavMenu(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.navigation_home) {
-                bottom_navigation.visibility = View.VISIBLE
-                topToolbar.visibility = View.VISIBLE
-
-            }
-            if(destination.id == R.id.mainFragment) {
+            if(destination.id == R.id.mainFragment || destination.id == R.id.soloSessionFragment) {
             bottom_navigation.visibility = View.GONE
             topToolbar.visibility = View.GONE
             }
+            else{
+                bottom_navigation.visibility = View.VISIBLE
+                topToolbar.visibility = View.VISIBLE
+            }
         }
-
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -58,7 +56,6 @@ class MainActivity : AppCompatActivity(){
         bottomNav?.setupWithNavController(navController)
     }
 
-
     //setting menu in action bar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu,menu)
@@ -75,14 +72,12 @@ class MainActivity : AppCompatActivity(){
     // actions on click menu items
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.signOut -> {
-            Log.d(TAG,"HERE")
             val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
             val action = HomeFragmentDirections.actionNavigationHomeToMainFragment("signOut")
             navController.navigate(action)
             // User chose the "Print" item
             true
         }
-
         else -> {
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.

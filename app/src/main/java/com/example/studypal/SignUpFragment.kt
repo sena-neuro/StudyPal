@@ -16,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import java.util.*
 import com.google.firebase.auth.FirebaseAuthException
+import com.wajahatkarim3.easyvalidation.core.collection_ktx.nonEmptyList
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 
 /**
@@ -102,7 +105,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     }
     private fun validate(): Boolean{
         val valid = true
-        /*// Empty check
+        // Empty check
         nonEmptyList(userName, email, password, password, birthDate) { view, msg ->
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
             // The view will contain the exact view which is empty
@@ -127,7 +130,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             .textEqualTo(repeatPassword.text.toString())
             .addErrorCallback{
                 Toast.makeText(activity, getString(R.string.password_confirm_failed), Toast.LENGTH_SHORT).show()
-            }*/
+            }
         return valid
     }
     override fun onClick(v: View?) {

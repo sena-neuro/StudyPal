@@ -2,6 +2,7 @@ package com.example.studypal
 
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +12,28 @@ import kotlinx.android.synthetic.main.fragment_solo_session.*
 
 
 import android.content.pm.PackageManager
+import android.os.CountDownTimer
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.util.concurrent.TimeUnit
 
 /**
  * A simple [Fragment] subclass.
  */
-class SoloSessionFragment : Fragment() {
+class SoloSessionFragment : Fragment(), View.OnClickListener {
 
     private lateinit var rtcClient: RTCClient
+    private lateinit var sessionCountDownTimer: CountDownTimer
+    private lateinit var breakCountDownTimer: CountDownTimer
+
+
+    // TODO: these will be intput from previous fragment
+    private var sessionMins: Long = 1
+    private var breakMins: Long =1
+    private var sessionCount = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +43,50 @@ class SoloSessionFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_solo_session, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        createTimers()
+        sessionCountDownTimer.start()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*
-        local_view.setMirror(true)
-        local_view.setEnableHardwareScaler(true)
-        local_view.init(rootEglBase.eglBaseContext, null)
-        */
         checkCameraPermission()
-
+    }
+    private fun createTimers(){
+        sessionCountDownTimer = object : CountDownTimer(sessionMins*60*100,1000){
+            override fun onTick(milisUntilFinished: Long) {
+                var minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
+                var secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
+                        TimeUnit.MINUTES.toSeconds(minsLeft)
+                timeLeftTextWiev.setText("$minsLeft:$secondsLeft")
+                Log.d("Timer", "$minsLeft:$secondsLeft")
+            }
+            override fun onFinish() {
+                Log.d("timer", "timer finished decrement counter and reset values")
+                sessionCount--
+                Toast.makeText(context, "Session has ended, take a break", Toast.LENGTH_LONG).show()
+                stateTextView.text = getString(R.string.break_text)
+                breakCountDownTimer.start()
+                if(sessionCount == 0){
+                    // TODO: End session, show end screen
+                }
+            }
+        }
+        breakCountDownTimer = object : CountDownTimer(breakMins*60*100,1000){
+            override fun onTick(milisUntilFinished: Long) {
+                var minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
+                var secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
+                        TimeUnit.MINUTES.toSeconds(minsLeft)
+                timeLeftTextWiev.setText("$minsLeft:$secondsLeft")
+                Log.d("Timer", "$minsLeft:$secondsLeft")
+            }
+            override fun onFinish() {
+                Log.d("timer", " break timer finished decrement counter and reset values")
+                Toast.makeText(context, "Break has ended, start your session", Toast.LENGTH_LONG).show()
+                stateTextView.text = getString(R.string.session_text)
+                sessionCountDownTimer.start()
+            }
+        }
     }
 
     private fun checkCameraPermission() {
@@ -91,9 +138,20 @@ class SoloSessionFragment : Fragment() {
     private fun onCameraPermissionDenied() {
         Toast.makeText(context, "Camera Permission Denied", Toast.LENGTH_LONG).show()
     }
-
+    private fun closeCall(){
+        sessionCountDownTimer.cancel()
+        breakCountDownTimer.cancel()
+        Log.d("closeCall", "Not implemented")
+    }
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1
         private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
+    }
+
+
+    override fun onClick(p0: View?) {
+        when (p0!!.id) {
+            R.id.closeCallButton -> closeCall()
+        }
     }
 }

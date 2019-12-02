@@ -101,7 +101,6 @@ class SignInFragment : Fragment(), View.OnClickListener {
         } else {
             fieldPassword.error = null
         }
-
         return valid
     }
     override fun onClick(v: View?) {

@@ -28,4 +28,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="search_hint">Search a user</string>
     <string name="search">SEARCH</string>
+    <string name="start_session">Start Session</string>
+    <string name="break_text">In Break</string>
+    <string name="session_text">In Session</string>
 </resources>

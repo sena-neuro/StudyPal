@@ -65,7 +65,6 @@ class MainFragment : Fragment(), View.OnClickListener {
         email_sign_in_button.setOnClickListener(this)
         signUpButton.setOnClickListener(this)
 
-        // Sign-out from googlr too
     }
 
     override fun onResume() {
