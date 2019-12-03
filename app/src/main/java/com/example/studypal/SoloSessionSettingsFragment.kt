@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import kotlinx.android.synthetic.main.fragment_solo_session_setings.*
-import kotlinx.android.synthetic.main.fragment_stream_settings.*
+import kotlinx.android.synthetic.main.fragment_solo_session_settings.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -35,7 +35,7 @@ class SoloSessionSettingsFragment : Fragment(),View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when (p0!!.id) {
-            R.id.startSoloSessionButton -> navController.navigate(R.id.action_soloSessionSetingsFragment_to_soloSessionFragment)
+            R.id.startSoloSessionButton -> navController.navigate(R.id.action_soloSessionSettingsFragment_to_soloSessionFragment)
 
         }
     }

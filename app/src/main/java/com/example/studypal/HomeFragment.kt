@@ -77,7 +77,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 navController.navigate(action)
             }*/
             R.id.streamSettingsButton -> navController.navigate(R.id.action_navigation_home_to_streamSettingsFragment)
-            R.id.soloSessionSettingsButton -> navController.navigate(R.id.action_navigation_home_to_soloSessionSetingsFragment)
+            R.id.soloSessionSettingsButton -> navController.navigate(R.id.action_navigation_home_to_soloSessionSettingsFragment)
             R.id.pairWithPalSettingsButton -> navController.navigate(R.id.action_navigation_home_to_pairWithPalSettingsFragment)
 
         }

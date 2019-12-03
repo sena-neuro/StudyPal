@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_pair_with_pal_settings.*
-import kotlinx.android.synthetic.main.fragment_solo_session_setings.*
+
 
 /**
  * A simple [Fragment] subclass.

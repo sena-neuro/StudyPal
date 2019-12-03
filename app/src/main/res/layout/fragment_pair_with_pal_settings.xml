@@ -11,22 +11,24 @@
         android:id="@+id/timerSwitchp"
         android:layout_width="215dp"
         android:layout_height="34dp"
-        android:layout_marginEnd="96dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="496dp"
         android:text="Timer"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/breakTimeMin"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/breakTimeMin"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.522" />
+        app:layout_constraintVertical_bias="0.677" />
 
     <Switch
         android:id="@+id/focusReminderSwitch"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="100dp"
         android:text="Focus Reminder"
-        app:layout_constraintEnd_toEndOf="@+id/breakTimeMin"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="@+id/timerSwitchp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/breakTimeMin"
         app:layout_constraintTop_toBottomOf="@+id/breakTimeMin" />
 
@@ -55,6 +57,7 @@
         android:id="@+id/studyTimeMin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="study time(min)"
