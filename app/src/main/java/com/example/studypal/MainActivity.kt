@@ -28,7 +28,11 @@ class MainActivity : AppCompatActivity(){
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setupBottomNavMenu(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.mainFragment || destination.id == R.id.soloSessionFragment) {
+
+            // Fragments that we do not want the navigation elements to show up
+            val navigationNonVisibleIds = setOf<Int>( R.id.mainFragment,R.id.soloSessionFragment,
+                R.id.signInFragment, R.id.signUpFragment)
+            if(navigationNonVisibleIds.contains(destination.id)) {
             bottom_navigation.visibility = View.GONE
             topToolbar.visibility = View.GONE
             }

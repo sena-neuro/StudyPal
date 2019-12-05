@@ -1,5 +1,4 @@
 package com.example.studypal
-
 import android.app.Application
 import android.content.Context
 import org.webrtc.Camera2Enumerator
