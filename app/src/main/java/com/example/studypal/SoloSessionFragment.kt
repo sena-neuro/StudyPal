@@ -2,6 +2,7 @@ package com.example.studypal
 
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +16,12 @@ import android.content.pm.PackageManager
 import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import java.util.concurrent.TimeUnit
 
 /**
@@ -28,12 +32,26 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private lateinit var rtcClient: RTCClient
     private lateinit var sessionCountDownTimer: CountDownTimer
     private lateinit var breakCountDownTimer: CountDownTimer
+    private lateinit var navController: NavController
 
 
     // TODO: these will be intput from previous fragment
     private var sessionMins: Long = 1
     private var breakMins: Long =1
     private var sessionCount = 1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // This callback will only be called when MyFragment is at least Started.
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button
+            confirmExit()
+
+
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +62,8 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+
         checkCameraPermission()
         createTimers()
         sessionCountDownTimer.start()
@@ -62,11 +82,19 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             override fun onFinish() {
                 Log.d("timer", "timer finished decrement counter and reset values")
                 sessionCount--
-                Toast.makeText(context, "Session has ended, take a break", Toast.LENGTH_LONG).show()
-                stateTextView.text = getString(R.string.break_text)
-                breakCountDownTimer.start()
+
                 if(sessionCount == 0){
                     // TODO: End session, show end screen
+                    // onStop() or onDestroy()
+                    Log.d("SOLO", "sessions finished")
+                    closeCall()
+
+
+                }
+                else{
+                    Toast.makeText(context, "Session has ended, take a break", Toast.LENGTH_LONG).show()
+                    stateTextView.text = getString(R.string.break_text)
+                    breakCountDownTimer.start()
                 }
             }
         }
@@ -100,6 +128,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         super.onPause()
     }
 
+
     private fun onCameraPermissionGranted() {
         rtcClient = RTCClient(activity!!.application, local_view)
         rtcClient.startLocalVideoCapture()
@@ -127,6 +156,27 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             .show()
     }
 
+    private fun confirmExit() {
+        val alertDialog = AlertDialog.Builder(activity!!)
+            //set icon
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            //set title
+            .setTitle("Are you sure to exit this session?")
+            //set message
+            .setMessage("If yes then application will close")
+            //set positive button
+            .setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+                closeCall()
+            }
+            //set negative button
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+                Toast.makeText(context, "Nothing Happened", Toast.LENGTH_LONG).show()
+            }
+            .show()
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
@@ -142,7 +192,8 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private fun closeCall(){
         sessionCountDownTimer.cancel()
         breakCountDownTimer.cancel()
-        Log.d("closeCall", "Not implemented")
+        // TODO stop webrtc
+        navController.navigate(R.id.action_soloSessionFragment_to_endSessionFragment)
     }
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1
@@ -150,7 +201,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     }
     override fun onClick(p0: View?) {
         when (p0!!.id) {
-            R.id.closeCallButton -> closeCall()
+            R.id.closeCallButton -> confirmExit()
         }
     }
 }

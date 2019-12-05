@@ -57,6 +57,9 @@ class RTCClient(
         }
 
     private fun initSurfaceView() {
+        localVideoOutput?.setMirror(true)
+        localVideoOutput?.setEnableHardwareScaler(true)
+
         localVideoOutput?.init(rootEglBase.eglBaseContext, null)
         localVideoOutput?.setZOrderMediaOverlay(true)
     }

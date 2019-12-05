@@ -89,12 +89,27 @@
         <action
                 android:id="@+id/action_streamSettingsFragment_to_soloSessionFragment"
                 app:destination="@id/soloSessionFragment"
-                app:popUpTo="@id/streamSettingsFragment"
-                app:popUpToInclusive="true"/>
+                app:popUpTo="@+id/navigation_home" />
     </fragment>
     <fragment
             android:id="@+id/soloSessionFragment"
             android:name="com.example.studypal.SoloSessionFragment"
             android:label="fragment_solo_session"
-            tools:layout="@layout/fragment_solo_session" />
+            tools:layout="@layout/fragment_solo_session" >
+        <action
+                android:id="@+id/action_soloSessionFragment_to_endSessionFragment"
+                app:destination="@id/endSessionFragment"
+                app:popUpTo="@+id/navigation_home" />
+    </fragment>
+    <fragment
+            android:id="@+id/endSessionFragment"
+            android:name="com.example.studypal.EndSessionFragment"
+            android:label="fragment_end_session"
+            tools:layout="@layout/fragment_end_session" >
+        <action
+                android:id="@+id/action_endSessionFragment_to_navigation_home"
+                app:destination="@id/navigation_home"
+                app:popUpTo="@+id/navigation_home"
+                app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

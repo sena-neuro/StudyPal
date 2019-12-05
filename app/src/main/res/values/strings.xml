@@ -32,4 +32,6 @@
     <string name="break_text">In Break</string>
     <string name="session_text">In Session</string>
     <string name="timer_text">%d:%d</string>
+    <string name="okay">Okay!</string>
+    <string name="you_have_studied_for_minutes_congratulations">You have studied for ... minutes. Congratulations.</string>
 </resources>
