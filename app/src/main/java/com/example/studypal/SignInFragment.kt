@@ -1,4 +1,5 @@
 package com.example.studypal
+
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -9,11 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import kotlinx.android.synthetic.main.fragment_sign_in.*
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class SignInFragment : Fragment(), View.OnClickListener {
 
@@ -43,10 +42,9 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
     private fun signIn(email: String, password: String) {
         Log.d(TAG, "signIn:$email")
-        /*if (!validateForm()) {
+        if (!validateForm()) {
             return
-        }*/
-
+        }
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener{ task ->
                 if (task.isSuccessful) {

@@ -32,4 +32,7 @@
     <string name="break_text">In Break</string>
     <string name="session_text">In Session</string>
     <string name="timer_text">%d:%d</string>
+    <string name="solo_session">Solo Session</string>
+    <string name="minutes_in_break">Minutes in Break</string>
+    <string name="minites_in_session">Minites in Session</string>
 </resources>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SoloSessionSettingsFragment"
+        android:id="@+id/soloSessionSettingsFragment">
+
+    <Button
+            android:id="@+id/startSoloSessionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="52dp"
+            android:text="@string/start_session"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+            android:id="@+id/sessionMinutesSeekBar"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_width="286dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:max="200"
+            android:progress="25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sessionMinutesText" />
+
+    <TextView
+            android:id="@+id/sessionMinutesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/minites_in_session"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/minutesInBreakText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/minutes_in_break"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sessionMinutesSeekBar" />
+
+    <SeekBar
+            android:id="@+id/breakMinutesSeekBar"
+            android:layout_width="286dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="8dp"
+            android:max="200"
+            android:progress="5"
+            app:layout_constraintEnd_toEndOf="@+id/sessionMinutesSeekBar"
+            app:layout_constraintStart_toStartOf="@+id/sessionMinutesSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/minutesInBreakText" />
+
+    <TextView
+            android:id="@+id/sessionMinutesTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="25"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sessionMinutesSeekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sessionMinutesSeekBar"
+            app:layout_constraintTop_toTopOf="@+id/sessionMinutesSeekBar" />
+
+    <TextView
+            android:id="@+id/breakMinutesTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="5"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/breakMinutesSeekBar"
+            app:layout_constraintEnd_toEndOf="@+id/sessionMinutesTextView"
+            app:layout_constraintStart_toStartOf="@+id/sessionMinutesTextView"
+            app:layout_constraintTop_toTopOf="@+id/breakMinutesSeekBar" />
+
+    <TextView
+            android:id="@+id/numberOfSessionsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Number of Sessions"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/minutesInBreakText"
+            app:layout_constraintStart_toStartOf="@+id/minutesInBreakText"
+            app:layout_constraintTop_toBottomOf="@+id/breakMinutesSeekBar" />
+
+    <SeekBar
+            android:id="@+id/sessionCountSeekBar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="286dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="8dp"
+            android:max="10"
+            android:progress="3"
+            app:layout_constraintEnd_toEndOf="@+id/breakMinutesSeekBar"
+            app:layout_constraintStart_toStartOf="@+id/breakMinutesSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/numberOfSessionsTextView" />
+
+    <TextView
+            android:id="@+id/sessionCountTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="3"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sessionCountSeekBar"
+            app:layout_constraintEnd_toEndOf="@+id/breakMinutesTextView"
+            app:layout_constraintStart_toStartOf="@+id/breakMinutesTextView"
+            app:layout_constraintTop_toTopOf="@+id/sessionCountSeekBar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
