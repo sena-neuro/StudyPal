@@ -82,6 +82,16 @@
             android:label="fragment_social"
             tools:layout="@layout/fragment_social" />
     <fragment
+            android:id="@+id/soloSessionSettingsFragment"
+            android:name="com.example.studypal.SoloSessionSettingsFragment"
+            android:label="fragment_solo_session_settings"
+            tools:layout="@layout/fragment_solo_session_settings" >
+        <action
+                android:id="@+id/action_soloSessionSettingsFragment_to_soloSessionFragment"
+                app:destination="@id/soloSessionFragment"
+                app:popUpTo="@id/navigation_home" />
+    </fragment>
+    <fragment
             android:id="@+id/soloSessionFragment"
             android:name="com.example.studypal.SoloSessionFragment"
             android:label="fragment_solo_session"
@@ -95,14 +105,34 @@
         <argument
                 android:name="sessionCount"
                 app:argType="integer" />
+        <action
+                android:id="@+id/action_soloSessionFragment_to_endSessionFragment"
+                app:destination="@id/endSessionFragment"
+                app:popUpTo="@+id/navigation_home"/>
     </fragment>
     <fragment
-            android:id="@+id/soloSessionSettingsFragment"
-            android:name="com.example.studypal.SoloSessionSettingsFragment"
-            android:label="fragment_solo_session_settings"
-            tools:layout="@layout/fragment_solo_session_settings" >
+            android:id="@+id/endSessionFragment"
+            android:name="com.example.studypal.EndSessionFragment"
+            android:label="fragment_end_session"
+            tools:layout="@layout/fragment_end_session" >
         <action
-                android:id="@+id/action_soloSessionSettingsFragment_to_soloSessionFragment"
-                app:destination="@id/soloSessionFragment" />
+                android:id="@+id/action_endSessionFragment_to_navigation_home"
+                app:destination="@id/navigation_home"
+                app:popUpTo="@+id/navigation_home"
+                app:popUpToInclusive="false" />
+        <argument
+                android:name="inSession"
+                app:argType="boolean" />
+        <argument android:name="totalMinsInSession"
+                app:argType="long" />
+        <argument
+                android:name="sessionMins"
+                app:argType="integer" />
+        <argument
+                android:name="sessionCount"
+                app:argType="integer" />
+        <argument
+                android:name="breakMins"
+                app:argType="integer" />
     </fragment>
 </navigation>

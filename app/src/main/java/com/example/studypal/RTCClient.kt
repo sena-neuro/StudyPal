@@ -1,14 +1,7 @@
 package com.example.studypal
 import android.app.Application
 import android.content.Context
-import org.webrtc.Camera2Enumerator
-import org.webrtc.DefaultVideoDecoderFactory
-import org.webrtc.DefaultVideoEncoderFactory
-import org.webrtc.EglBase
-import org.webrtc.PeerConnectionFactory
-import org.webrtc.SurfaceTextureHelper
-import org.webrtc.SurfaceViewRenderer
-import org.webrtc.VideoCapturer
+import org.webrtc.*
 
 class RTCClient(
     context: Application,
@@ -56,6 +49,9 @@ class RTCClient(
         }
 
     private fun initSurfaceView() {
+        localVideoOutput?.setMirror(true)
+        localVideoOutput?.setEnableHardwareScaler(true)
+
         localVideoOutput?.init(rootEglBase.eglBaseContext, null)
         localVideoOutput?.setZOrderMediaOverlay(true)
     }

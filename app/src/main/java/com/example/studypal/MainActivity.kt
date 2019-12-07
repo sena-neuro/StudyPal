@@ -9,7 +9,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -30,9 +29,9 @@ class MainActivity : AppCompatActivity(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
             // Fragments that we do not want the navigation elements to show up
-            val navigationNonVisibleIds = setOf<Int>( R.id.mainFragment,R.id.soloSessionFragment,
-                R.id.signInFragment, R.id.signUpFragment)
-            if(navigationNonVisibleIds.contains(destination.id)) {
+            val navigationVisibleIds = setOf<Int>( R.id.navigation_home,R.id.navigation_profile,
+                R.id.navigation_settings, R.id.navigation_social)
+            if(!navigationVisibleIds.contains(destination.id)) {
             bottom_navigation.visibility = View.GONE
             topToolbar.visibility = View.GONE
             }
@@ -91,4 +90,5 @@ class MainActivity : AppCompatActivity(){
     companion object {
         private const val TAG = "MainActivity"
     }
+
 }

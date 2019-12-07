@@ -35,4 +35,6 @@
     <string name="solo_session">Solo Session</string>
     <string name="minutes_in_break">Minutes in Break</string>
     <string name="minites_in_session">Minites in Session</string>
+    <string name="okay">Okay!</string>
+    <string name="you_have_studied_for_minutes_congratulations">You have studied for ... minutes. Congratulations.</string>
 </resources>

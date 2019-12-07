@@ -9,14 +9,17 @@
 
     <Switch
             android:id="@+id/switch1"
-            android:layout_width="215dp"
+            android:layout_width="0dp"
             android:layout_height="34dp"
-            android:layout_marginEnd="44dp"
-            android:layout_marginBottom="496dp"
             android:text="Timer"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.004" />
 
     <Switch
             android:id="@+id/switch2"
