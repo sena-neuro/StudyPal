@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_end_session.*
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_end_session.*
 /**
  * A simple [Fragment] subclass.
  */
-class EndSessionFragment : Fragment(), View.OnClickListener {
+class EndSessionFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarChangeListener {
 
     private lateinit var navController: NavController
 
@@ -38,7 +39,13 @@ class EndSessionFragment : Fragment(), View.OnClickListener {
             "Well done! You have studied for $sessionDuration minutes."
         }
         messageText.text = message
+        ratingBar.setOnRatingBarChangeListener(this)
 
+    }
+
+    // TODO edit
+    override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
+        val sessionRating = rating
     }
 
     override fun onClick(v: View?) {

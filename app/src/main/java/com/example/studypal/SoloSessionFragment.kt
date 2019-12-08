@@ -1,9 +1,6 @@
 package com.example.studypal
 
-
 import android.Manifest
-import android.content.DialogInterface
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +61,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
+        exitSessionButton.setOnClickListener(this)
         checkCameraPermission()
         createTimers()
         sessionCountDownTimer.start()
@@ -199,9 +197,9 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1
         private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
     }
-    override fun onClick(p0: View?) {
-        when (p0!!.id) {
-            R.id.closeCallButton -> confirmExit()
+    override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.exitSessionButton -> confirmExit()
         }
     }
 }

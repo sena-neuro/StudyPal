@@ -22,35 +22,40 @@ tools:context=".SoloSessionFragment">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Minutes"
+            android:textColor="#80FFFFFF"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/local_view"
-            app:layout_constraintHorizontal_bias="0.875"
+            app:layout_constraintHorizontal_bias="0.743"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.935" />
+            app:layout_constraintVertical_bias="0.084" />
 
     <TextView
             android:id="@+id/stateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="208dp"
             android:text="Session"
+            android:textColor="#80FFFFFF"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/timeLeftTextWiev"
+            app:layout_constraintHorizontal_bias="0.58"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.935" />
+            app:layout_constraintVertical_bias="0.084" />
 
-    <ImageButton
-            android:id="@+id/closeCallButton"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/exitSessionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/presence_video_busy"
+            android:src="@android:drawable/ic_media_pause"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/stateTextView"
-            app:layout_constraintHorizontal_bias="0.17"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.954"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.943" />
+            app:layout_constraintVertical_bias="0.976" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
