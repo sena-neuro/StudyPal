@@ -51,8 +51,8 @@ class EndSessionFragment : Fragment(), View.OnClickListener {
             args.totalMinsInSession.toInt(),
             args.sessionCount,
             args.inSession,
-            args.breakMins
-        )
+            args.breakMins,
+            time)
         // TODO: Add focus to the SessionData and database as well
         val currentUserID = auth?.currentUser!!.uid
         db?.collection("users")!!.document(currentUserID).collection("SessionHistory").document(time.toString()).set(sessionData)

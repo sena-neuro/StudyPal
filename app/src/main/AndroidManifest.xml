@@ -27,7 +27,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                android:launchMode="singleTop">
             <meta-data android:name="android.app.searchable"
                     android:resource="@xml/searchable"/>
             <intent-filter>

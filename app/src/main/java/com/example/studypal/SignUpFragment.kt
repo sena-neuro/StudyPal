@@ -92,8 +92,9 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                 val user = mAuth!!.currentUser
                 val newUser = User(userName.text.toString(),
                     email,
-                    c.time,
-                    phoneNumber.text.toString())
+                    phoneNumber.text.toString(),
+                    c.time
+                    )
                 db!!.collection("users").document(user!!.uid).set(newUser)
                 Log.d(TAG,newUser.toString())
                 navController!!.navigate(R.id.action_signUpFragment_to_homeFragment)

@@ -14,16 +14,20 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(){
+    private lateinit var db:FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         bottom_navigation.visibility = View.GONE
         topToolbar.visibility = View.GONE
         setSupportActionBar(topToolbar)
+        db = FirebaseFirestore.getInstance()
+
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setupBottomNavMenu(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -40,19 +44,32 @@ class MainActivity : AppCompatActivity(){
                 topToolbar.visibility = View.VISIBLE
             }
         }
+        handleIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        setIntent(intent)
         // Verify the action and get the query
-        if (Intent.ACTION_SEARCH == intent!!.action) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                search(query)
-            }
-        }
+        handleIntent(intent!!)
     }
     private fun search(query:String) {
         Log.d("Main", query)
+        val matchingUserList:MutableList<User> = mutableListOf()
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    if(document.data["username"].toString().contains(query,ignoreCase = true)) {
+                        Log.d(TAG, "${document.id} => ${document.data}")
+                        matchingUserList.add(document.toObject(User::class.java))
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting documents: ", exception)
+            }
+        Log.d(TAG, matchingUserList.toString())
     }
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -65,11 +82,13 @@ class MainActivity : AppCompatActivity(){
 
         // Get the SearchView and set the searchable configuration
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
         (menu!!.findItem(R.id.menu_search).actionView as SearchView).apply {
             // Assumes current activity is the searchable activity
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             isIconifiedByDefault = false // Do not iconify the widget; expand it by default
         }
+
         return super.onCreateOptionsMenu(menu)
     }
     // actions on click menu items
@@ -85,6 +104,14 @@ class MainActivity : AppCompatActivity(){
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
+        }
+    }
+    private fun handleIntent(intent: Intent) {
+        if (Intent.ACTION_SEARCH == intent.action) {
+            val query = intent.getStringExtra(SearchManager.QUERY)
+            if (query != null) {
+                search(query)
+            }
         }
     }
     companion object {

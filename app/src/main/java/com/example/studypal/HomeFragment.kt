@@ -18,6 +18,10 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
