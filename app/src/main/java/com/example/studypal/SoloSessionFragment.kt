@@ -1,24 +1,27 @@
 package com.example.studypal
 
+
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.se.omapi.Session
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_solo_session.*
-
-
-import android.content.pm.PackageManager
-import android.os.CountDownTimer
-import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import kotlinx.android.synthetic.main.fragment_solo_session.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -27,28 +30,68 @@ import java.util.concurrent.TimeUnit
 class SoloSessionFragment : Fragment(), View.OnClickListener {
 
     private lateinit var rtcClient: RTCClient
-    private lateinit var sessionCountDownTimer: CountDownTimer
-    private lateinit var breakCountDownTimer: CountDownTimer
+
+    private var remainingSession : Int = 3
+    private var sessionMinutes : Long = 10
+    private var breakMinutes : Long = 5
+
+    //private lateinit var sessionCountDownTimer: CountDownTimer
+    //private lateinit var breakCountDownTimer: CountDownTimer
     private lateinit var navController: NavController
 
+    private val sessionViewModel: SessionViewModel by lazy {
+        ViewModelProviders.of(this).get(SessionViewModel::class.java)
+    }
+    private val milisChangeObserver = Observer<Long> {
+        value -> value?.let{displayTime(value)}
+    }
 
-    // TODO: these will be intput from previous fragment
-    private var sessionMins: Long = 1
-    private var breakMins: Long =1
-    private var sessionCount = 1
+    private val sessionObserver = Observer<Boolean> {
+        value -> value?.let{
+            if( value )
+                stateTextView.text = "In study session"
+            else
+                stateTextView.text = "In Break"
+        }
+    }
+    private val remainingSessionObserver = Observer<Int> {
+            value -> value?.let{
+            Log.d(TAG, "Rem Sess:$it")
+            if (it == 0){
+                closeCall()
+            }
+    }
+
+    }
+
+    private fun displayTime(value: Long) {
+        Log.d(TAG, "oley be observed")
+        val remainingMinutes = TimeUnit.MILLISECONDS.toMinutes(value)
+        val remainingSeconds = TimeUnit.MILLISECONDS.toSeconds(value) -
+                TimeUnit.MINUTES.toSeconds(remainingMinutes)
+        val timeLeftText:String = String.format(resources.getString(R.string.timer_text), remainingMinutes, remainingSeconds)
+        timeLeftTextView.text = timeLeftText
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Create a ViewModel the first time the system calls an activity's onCreate() method.
+        // Re-created activities receive the same MyViewModel instance created by the first activity.
+        sessionViewModel.milisChangeNotifier.observe(this,milisChangeObserver)
+        sessionViewModel.onSession.observe(this, sessionObserver)
+        sessionViewModel.remainingSessionCount.observe(this,  remainingSessionObserver)
+        //lifecycle.addObserver(sessionViewModel)
 
         // This callback will only be called when MyFragment is at least Started.
         val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             // Handle the back button
             confirmExit()
-
-
         }
-
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,54 +106,8 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
 
         exitSessionButton.setOnClickListener(this)
         checkCameraPermission()
-        createTimers()
-        sessionCountDownTimer.start()
+        sessionViewModel.createTimers(remainingSession, sessionMinutes, breakMinutes)
 
-    }
-    private fun createTimers(){
-        sessionCountDownTimer = object : CountDownTimer(sessionMins*60*100,1000){
-            override fun onTick(milisUntilFinished: Long) {
-                var minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
-                var secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
-                        TimeUnit.MINUTES.toSeconds(minsLeft)
-                var timeLeftText:String? = String.format(resources.getString(R.string.timer_text), minsLeft, secondsLeft)
-                timeLeftTextWiev.text = timeLeftText
-
-            }
-            override fun onFinish() {
-                Log.d("timer", "timer finished decrement counter and reset values")
-                sessionCount--
-
-                if(sessionCount == 0){
-                    // TODO: End session, show end screen
-                    // onStop() or onDestroy()
-                    Log.d("SOLO", "sessions finished")
-                    closeCall()
-
-
-                }
-                else{
-                    Toast.makeText(context, "Session has ended, take a break", Toast.LENGTH_LONG).show()
-                    stateTextView.text = getString(R.string.break_text)
-                    breakCountDownTimer.start()
-                }
-            }
-        }
-        breakCountDownTimer = object : CountDownTimer(breakMins*60*100,1000){
-            override fun onTick(milisUntilFinished: Long) {
-                val minsLeft = TimeUnit.MILLISECONDS.toMinutes(milisUntilFinished)
-                val secondsLeft = TimeUnit.MILLISECONDS.toSeconds(milisUntilFinished) -
-                        TimeUnit.MINUTES.toSeconds(minsLeft)
-                val timeLeftText:String? = String.format(resources.getString(R.string.timer_text), minsLeft, secondsLeft)
-                timeLeftTextWiev.text = timeLeftText
-            }
-            override fun onFinish() {
-                Log.d("timer", " break timer finished decrement counter and reset values")
-                Toast.makeText(context, "Break has ended, start your session", Toast.LENGTH_LONG).show()
-                stateTextView.text = getString(R.string.session_text)
-                sessionCountDownTimer.start()
-            }
-        }
     }
 
     private fun checkCameraPermission() {
@@ -120,12 +117,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             onCameraPermissionGranted()
         }
     }
-    override fun onPause() {
-        sessionCountDownTimer.cancel()
-        breakCountDownTimer.cancel()
-        super.onPause()
-    }
-
 
     private fun onCameraPermissionGranted() {
         rtcClient = RTCClient(activity!!.application, local_view)
@@ -187,15 +178,17 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private fun onCameraPermissionDenied() {
         Toast.makeText(context, "Camera Permission Denied", Toast.LENGTH_LONG).show()
     }
+
     private fun closeCall(){
-        sessionCountDownTimer.cancel()
-        breakCountDownTimer.cancel()
         // TODO stop webrtc
+        sessionViewModel.closeCall()
         navController.navigate(R.id.action_soloSessionFragment_to_endSessionFragment)
     }
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1
         private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
+        private const val TAG = "SOLO SESSION"
+
     }
     override fun onClick(v: View?) {
         when (v!!.id) {
