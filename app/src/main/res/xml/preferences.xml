@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="Hmm"
+        app:title="Hmm"/>
+
+    <Preference
+        app:key="version"
+        app:title="Build version"
+        app:summary="0.0.0"/>
+
+</PreferenceScreen>

@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_profile.*
  * A simple [Fragment] subclass.
  */
 class ProfileFragment : Fragment() {
-    private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var db: FirebaseFirestore
@@ -33,18 +32,18 @@ class ProfileFragment : Fragment() {
 
         loadSessionData(auth.currentUser!!, object:SessionDataCallBack{
             override fun onCallback(sessionHistory: ArrayList<SessionData>) {
-                viewManager = LinearLayoutManager(context)
-                viewAdapter = profileAdaptor(listOfSessions)
-                recyclerView = myRecyclerView
-                var mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                recyclerView.layoutManager = mLayoutManager
-                viewAdapter = profileAdaptor(listOfSessions)
-                recyclerView.adapter = viewAdapter
+                Log.d(TAG,sessionHistory.toString())
+                if(!sessionHistory.isEmpty()) {
+                    viewManager = LinearLayoutManager(context)
+                    myRecyclerView.layoutManager = viewManager
+                    viewAdapter = ProfileAdaptor(listOfSessions)
+                    myRecyclerView.adapter = viewAdapter
+                }
             }
         })
     }
     private fun loadSessionData(user: FirebaseUser, sessionDataCallBack:SessionDataCallBack){
-        db.collection("users").document(user.uid).collection("sessionHistory")
+        db.collection("users").document(user.uid).collection("SessionHistory")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {

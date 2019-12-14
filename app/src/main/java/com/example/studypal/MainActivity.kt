@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(){
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.signOut -> {
             val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-            val action = HomeFragmentDirections.actionNavigationHomeToMainFragment("signOut")
+            val action = MainNavDirections.actionGlobalMainFragment("signOut")
             navController.navigate(action)
             // User chose the "Print" item
             true

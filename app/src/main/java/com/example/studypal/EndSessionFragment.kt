@@ -3,9 +3,11 @@ package com.example.studypal
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -19,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_end_session.*
 /**
  * A simple [Fragment] subclass.
  */
-class EndSessionFragment : Fragment(), View.OnClickListener {
+class EndSessionFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingBarChangeListener {
 
     private lateinit var navController: NavController
     val args: EndSessionFragmentArgs by navArgs()
@@ -45,17 +47,6 @@ class EndSessionFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
         advance_button.setOnClickListener(this)
-        val time = System.currentTimeMillis()
-        val sessionData = SessionData(
-            args.sessionMins,
-            args.totalMinsInSession.toInt(),
-            args.sessionCount,
-            args.inSession,
-            args.breakMins,
-            time)
-        // TODO: Add focus to the SessionData and database as well
-        val currentUserID = auth?.currentUser!!.uid
-        db?.collection("users")!!.document(currentUserID).collection("SessionHistory").document(time.toString()).set(sessionData)
 
         val message = if( args.totalMinsInSession >  60) {
             val sessionDurationHrs = args.totalMinsInSession / 60
@@ -65,13 +56,38 @@ class EndSessionFragment : Fragment(), View.OnClickListener {
             "Well done! You have studied for ${args.totalMinsInSession} minutes."
         }
         messageText.text = message
+        ratingBar.setOnRatingBarChangeListener(this)
 
+    }
+
+    override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
+        val sessionRating = rating
+    }
+    fun calculateScore():Float{
+        return ratingBar.rating
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.advance_button -> navController.navigate(R.id.action_endSessionFragment_to_navigation_home)
+            R.id.advance_button -> {
+                recorSession()
+                navController.navigate(R.id.action_endSessionFragment_to_navigation_home)
+                }
+            }
         }
-    }
 
+    private fun recorSession() {
+        val time = System.currentTimeMillis()
+        val sessionData = SessionData(
+            args.sessionMins,
+            args.totalMinsInSession.toInt(),
+            args.sessionCount,
+            args.inSession,
+            args.breakMins,
+            time,
+            calculateScore())
+        Log.d("sessionData", sessionData.toString())
+        val currentUserID = auth?.currentUser!!.uid
+        db?.collection("users")!!.document(currentUserID).collection("SessionHistory").document(time.toString()).set(sessionData)
+    }
 }

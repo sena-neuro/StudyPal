@@ -1,7 +1,6 @@
 package com.example.studypal
 
 class Model {
-
     var name: String? = null
     var image_drawable: Int = 0
 
