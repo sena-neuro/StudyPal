@@ -26,6 +26,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
         soloSessionSettingsButton.setOnClickListener(this)
+        one2OneSessionButton.setOnClickListener(this)
     }
     override fun onStart() {
         super.onStart()
@@ -46,6 +47,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onClick(v:View){
         val i = v.id
         when (i) {R.id.soloSessionSettingsButton -> navController.navigate(R.id.action_navigation_home_to_soloSessionSettingsFragment)
+            R.id.one2OneSessionButton -> navController.navigate(R.id.action_navigation_home_to_one2OneSessionFragment)
         }
     }
     companion object {

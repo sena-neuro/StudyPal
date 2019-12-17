@@ -3,7 +3,6 @@ package com.example.studypal
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,7 +85,6 @@ class EndSessionFragment : Fragment(), View.OnClickListener, RatingBar.OnRatingB
             args.breakMins,
             time,
             calculateScore())
-        Log.d("sessionData", sessionData.toString())
         val currentUserID = auth?.currentUser!!.uid
         db?.collection("users")!!.document(currentUserID).collection("SessionHistory").document(time.toString()).set(sessionData)
     }

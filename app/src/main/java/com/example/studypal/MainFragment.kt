@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -16,7 +17,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -44,7 +44,6 @@ class MainFragment : Fragment(), View.OnClickListener {
         // Inflate the layout for this fragment
         val WEB_CLIENT_ID =
             "977955202582-5ml9vjf3j4joh0etcstlit4dl1450n27.apps.googleusercontent.com"
-        auth = FirebaseAuth.getInstance()
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -126,6 +125,7 @@ class MainFragment : Fragment(), View.OnClickListener {
                 else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.exception)
+                        Toast.makeText(activity,   "Authorization failed", Toast.LENGTH_LONG).show()
                 }
             }
     }
@@ -149,10 +149,6 @@ class MainFragment : Fragment(), View.OnClickListener {
             R.id.signUpButton -> navController.navigate(R.id.action_mainFragment_to_signUpFragment)
             R.id.google_sign_in_button -> signIn()
         }
-    }
-
-    private fun addToDb(fUser: FirebaseUser) {
-
     }
     companion object {
         private const val TAG = "GoogleActivity"

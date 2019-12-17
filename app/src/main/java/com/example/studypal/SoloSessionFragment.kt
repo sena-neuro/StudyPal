@@ -41,12 +41,13 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private var totalMinsInSession:Long = 0
     private var sessionCount:Int = 0
     private var firstTimeFlag:Boolean = true
-
+    private var milis:Long=0
     private val sessionViewModel: SessionViewModel by lazy {
         ViewModelProviders.of(this).get(SessionViewModel::class.java)
     }
     private val milisChangeObserver = Observer<Long> {
-        value -> value?.let{displayTime(value)}
+        value -> value?.let{displayTime(value)
+        milis= value}
     }
 
     private val sessionObserver = Observer<Boolean> {
@@ -61,7 +62,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             else {
                 showNotification("Congratulations", "You have finished a session, take a break")
                 stateTextView.text = "In Break"
-
                 // Update total mins in session, session count and inSession Flag
                 totalMinsInSession += args.sessionMins
                 sessionCount += 1
@@ -203,6 +203,10 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private fun closeCall(){
         // TODO stop webrtc
         sessionViewModel.closeCall()
+        if(inSession){
+            val mins = TimeUnit.MILLISECONDS.toMinutes(milis)
+            totalMinsInSession += args.sessionMins - mins
+        }
         val action = SoloSessionFragmentDirections.
             actionSoloSessionFragmentToEndSessionFragment(inSession, totalMinsInSession, args.sessionMins.toInt(), sessionCount, args.breakMins.toInt())
         navController.navigate(action)

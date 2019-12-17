@@ -42,7 +42,8 @@ android {
 dependencies {
     def nav_version = "2.1.0"
     // Kotlin
-
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'com.opentok.android:opentok-android-sdk:2.16.3'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     def material_version = "1.1.0-alpha07"
@@ -61,7 +62,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-common:$anko_version"
 
     // WebRTC dependency
-    implementation 'org.webrtc:google-webrtc:1.0.28513'
+    //implementation 'org.webrtc:google-webrtc:1.0.28513'
 
     // Socket.io for signalling
     implementation 'io.socket:socket.io-client:0.8.3'

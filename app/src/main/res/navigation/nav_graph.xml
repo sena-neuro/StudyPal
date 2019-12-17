@@ -65,6 +65,9 @@
         <action
                 android:id="@+id/action_navigation_home_to_soloSessionSettingsFragment"
                 app:destination="@id/soloSessionSettingsFragment" />
+        <action
+                android:id="@+id/action_navigation_home_to_one2OneSessionFragment"
+                app:destination="@id/one2OneSessionFragment" />
     </fragment>
     <fragment
             android:id="@+id/navigation_profile"
@@ -138,4 +141,9 @@
     <action
             android:id="@+id/action_global_mainFragment"
             app:destination="@id/mainFragment" />
+    <fragment
+            android:id="@+id/one2OneSessionFragment"
+            android:name="com.example.studypal.One2OneSessionFragment"
+            android:label="fragment_one2_one_session"
+            tools:layout="@layout/fragment_one2_one_session" />
 </navigation>

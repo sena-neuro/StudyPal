@@ -11,7 +11,7 @@ class SessionViewModel() : ViewModel(), LifecycleObserver {
 
     companion object {
         private const val ONE_SECOND = 1000 //0 // 1000 milliseconds
-        private const val ONE_MINUTE = 1 // 60 seconds
+        private const val ONE_MINUTE = 60 // 60 seconds
     }
     private lateinit var sessionCountDownTimer: CountDownTimer
     private lateinit var breakCountDownTimer: CountDownTimer
