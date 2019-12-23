@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_solo_session_settings.*
 
 /**
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_solo_session_settings.*
  */
 class SoloSessionSettingsFragment : Fragment(), View.OnClickListener {
     private lateinit var navController: NavController
+    val args: SoloSessionSettingsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,12 +67,15 @@ class SoloSessionSettingsFragment : Fragment(), View.OnClickListener {
                 val sessionMins = sessionMinutesSeekBar.progress.toLong()
                 val breakMins = breakMinutesSeekBar.progress.toLong()
                 val sesionCount:Int = sessionCountSeekBar.progress
-                val action = SoloSessionSettingsFragmentDirections.actionSoloSessionSettingsFragmentToSoloSessionFragment(sessionMins, breakMins, sesionCount)
-                navController.navigate(action)
-
+                if(args.sessionType == "Solo"){
+                    val action = SoloSessionSettingsFragmentDirections.actionSoloSessionSettingsFragmentToSoloSessionFragment(sessionMins, breakMins, sesionCount)
+                    navController.navigate(action)
+                }
+                else{
+                    val action = SoloSessionSettingsFragmentDirections.actionSoloSessionSettingsFragmentToOne2OneSessionFragment(breakMins,sesionCount,sessionMins)
+                    navController.navigate(action)
+                }
             }
-
         }
     }
-
 }

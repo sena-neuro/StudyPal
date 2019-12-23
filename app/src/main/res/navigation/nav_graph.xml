@@ -66,8 +66,8 @@
                 android:id="@+id/action_navigation_home_to_soloSessionSettingsFragment"
                 app:destination="@id/soloSessionSettingsFragment" />
         <action
-                android:id="@+id/action_navigation_home_to_one2OneSessionFragment"
-                app:destination="@id/one2OneSessionFragment" />
+                android:id="@+id/action_navigation_home_to_soloSessionSettingsFragment2"
+                app:destination="@id/soloSessionSettingsFragment" />
     </fragment>
     <fragment
             android:id="@+id/navigation_profile"
@@ -93,6 +93,12 @@
                 android:id="@+id/action_soloSessionSettingsFragment_to_soloSessionFragment"
                 app:destination="@id/soloSessionFragment"
                 app:popUpTo="@id/navigation_home" />
+        <action
+                android:id="@+id/action_soloSessionSettingsFragment_to_one2OneSessionFragment"
+                app:destination="@id/one2OneSessionFragment" />
+        <argument
+                android:name="sessionType"
+                app:argType="string" />
     </fragment>
     <fragment
             android:id="@+id/soloSessionFragment"
@@ -137,6 +143,9 @@
         <argument
                 android:name="breakMins"
                 app:argType="integer" />
+        <argument
+                android:name="sessionType"
+                app:argType="string" />
     </fragment>
     <action
             android:id="@+id/action_global_mainFragment"
@@ -145,5 +154,18 @@
             android:id="@+id/one2OneSessionFragment"
             android:name="com.example.studypal.One2OneSessionFragment"
             android:label="fragment_one2_one_session"
-            tools:layout="@layout/fragment_one2_one_session" />
+            tools:layout="@layout/fragment_one2_one_session" >
+        <argument
+                android:name="breakMins"
+                app:argType="long" />
+        <argument android:name="sessionCount"
+                app:argType="integer" />
+        <argument
+                android:name="sessionMins"
+                app:argType="long" />
+        <action
+                android:id="@+id/action_one2OneSessionFragment_to_endSessionFragment"
+                app:destination="@id/endSessionFragment"
+                app:popUpTo="@+id/navigation_home" />
+    </fragment>
 </navigation>
