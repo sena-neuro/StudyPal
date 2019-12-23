@@ -25,6 +25,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.fragment_solo_session.*
 import java.util.concurrent.TimeUnit
 
@@ -35,7 +39,13 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
 
     private lateinit var rtcClient: RTCClient
     private lateinit var mBackgroundSound: BackgroundSound
+    private var spotifyAppRemote : SpotifyAppRemote? = null
+
     val args: SoloSessionFragmentArgs by navArgs()
+    val spotifyMusic : Boolean
+        get() {
+            return args.backgroundMusic.contains("Spotify")
+        }
     private lateinit var navController: NavController
     private var inSession: Boolean = false
     private var totalMinsInSession:Long = 0
@@ -132,6 +142,26 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if(spotifyMusic) {
+            spotifyAppRemote?.let {
+                SpotifyAppRemote.disconnect(it)
+                initSpotify()
+            }
+        }
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(spotifyMusic) {
+            spotifyAppRemote?.let {
+                SpotifyAppRemote.disconnect(it)
+            }
+        }
+    }
     override fun onResume() {
         super.onResume()
         mBackgroundSound.execute(null)
@@ -249,5 +279,50 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             player.start()
             return null
         }
+    }
+
+    private fun playFromSpotify () {
+        spotifyAppRemote?.let {
+            // Play a playlist
+            val playlistURI = "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8" //37i9dQZF1DX2sUQwD7tbmL"
+            it.playerApi.play(playlistURI)
+            // Subscribe to PlayerState
+            val playlistName = it.playerApi
+            it.playerApi.subscribeToPlayerState().setEventCallback {
+                val track: Track = it.track
+                Log.d(TAG, track.name + " by " + track.artist.name)
+            }
+        }
+
+    }
+
+    private fun initSpotify ( ) {
+        val CLIENT_ID = "bee89f0e61db4516ab215e7fa380df62" // StudyPal client ID
+        val REDIRECT_URI = "http://com.example.studypal/callback/"
+
+
+        // Set the connection parameters
+        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+            .setRedirectUri(REDIRECT_URI)
+            .showAuthView(true)
+            .build()
+
+        SpotifyAppRemote.connect( context, connectionParams,
+            object : Connector.ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    spotifyAppRemote = appRemote
+                    Log.d(TAG, "Connected! Yay!")
+                    // Now you can start interacting with App Remote
+                    val connected = true
+                }
+
+                override fun onFailure(throwable: Throwable) {
+                    Log.d(TAG, throwable.message, throwable)
+                    // Something went wrong when attempting to connect! Handle errors here
+                    // TODO log in to spotify
+                }
+            })
+
+
     }
 }
