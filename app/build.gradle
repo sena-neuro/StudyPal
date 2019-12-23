@@ -39,6 +39,13 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     def nav_version = "2.1.0"
     // Kotlin
@@ -58,8 +65,17 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.preference:preference:1.1.0'
-
+    implementation 'com.google.android.material:material:1.0.0'
     implementation "org.jetbrains.anko:anko-common:$anko_version"
+
+    // For spotify
+    implementation project(':spotify-app-remote')
+    implementation "com.google.code.gson:gson:2.8.5"
+    //////////// SPOTIFY AUTHENTICATION
+    implementation 'com.spotify.android:auth:1.1.0' // Maven dependency
+    // All other dependencies for your app should also be here:
+    implementation 'androidx.browser:browser:1.2.0'
+    implementation "androidx.appcompat:appcompat:1.1.0"
 
     // WebRTC dependency
     //implementation 'org.webrtc:google-webrtc:1.0.28513'
