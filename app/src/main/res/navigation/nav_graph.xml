@@ -118,6 +118,10 @@
                 android:id="@+id/action_soloSessionFragment_to_endSessionFragment"
                 app:destination="@id/endSessionFragment"
                 app:popUpTo="@+id/navigation_home"/>
+        <argument
+                android:name="backgroundMusic"
+                app:argType="string"
+                android:defaultValue="None" />
     </fragment>
     <fragment
             android:id="@+id/endSessionFragment"

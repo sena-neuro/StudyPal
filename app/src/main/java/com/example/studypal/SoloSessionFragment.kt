@@ -7,6 +7,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Matrix
+import android.media.MediaPlayer
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -31,6 +33,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.fragment_solo_session.*
 import java.util.concurrent.TimeUnit
 
@@ -41,7 +47,16 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private val REQUEST_CODE_PERMISSIONS = 10
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     private val sessionType:String = "Solo"
+
+    private lateinit var rtcClient: RTCClient
+    private lateinit var mBackgroundSound: BackgroundSound
+    private var spotifyAppRemote : SpotifyAppRemote? = null
+
     val args: SoloSessionFragmentArgs by navArgs()
+    val spotifyMusic : Boolean
+        get() {
+            return args.backgroundMusic.contains("Spotify")
+        }
     private lateinit var navController: NavController
     private var inSession: Boolean = false
     private var totalMinsInSession:Long = 0
@@ -83,7 +98,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         }
     }
     private fun displayTime(value: Long) {
-        Log.d(TAG, "oley be observed")
         val remainingMinutes = TimeUnit.MILLISECONDS.toMinutes(value)
         val remainingSeconds = TimeUnit.MILLISECONDS.toSeconds(value) -
                 TimeUnit.MINUTES.toSeconds(remainingMinutes)
@@ -93,6 +107,8 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    mBackgroundSound = BackgroundSound()
+    Log.d(TAG,spotifyMusic.toString())
         // This callback will only be called when MyFragment is at least Started.
     // Create a ViewModel the first time the system calls an activity's onCreate() method.
     // Re-created activities receive the same MyViewModel instance created by the first activity.
@@ -105,10 +121,8 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
         // Handle the back button
         confirmExit()
+        }
     }
-}
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -180,27 +194,26 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             local_view.surfaceTexture = it.surfaceTexture
         }
         CameraX.bindToLifecycle(this, preview)
-        }
-    private fun updateTransform() {
-        val matrix = Matrix()
-
-        // Compute the center of the view finder
-        val centerX = local_view.width / 2f
-        val centerY = local_view.height / 2f
-
-        // Correct preview output to account for display rotation
-        val rotationDegrees = when(local_view.display.rotation) {
-            Surface.ROTATION_0 -> 0
-            Surface.ROTATION_90 -> 90
-            Surface.ROTATION_180 -> 180
-            Surface.ROTATION_270 -> 270
-            else -> return
-        }
-        matrix.postRotate(-rotationDegrees.toFloat(), centerX, centerY)
-
-        // Finally, apply transformations to our TextureView
-        local_view.setTransform(matrix)
     }
+    override fun onStop() {
+        super.onStop()
+        if(spotifyMusic) {
+            spotifyAppRemote?.let {
+                SpotifyAppRemote.disconnect(it)
+            }
+        }
+    }
+    override fun onPause() {
+        mBackgroundSound.cancel(true)
+        super.onPause()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(spotifyMusic)
+            initSpotify()
+    }
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun onCameraPermissionGranted() {
         startCamera()
@@ -272,12 +285,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             actionSoloSessionFragmentToEndSessionFragment(inSession, totalMinsInSession, args.sessionMins.toInt(), sessionCount, args.breakMins.toInt(), sessionType)
         navController.navigate(action)
     }
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 1
-        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
-        private const val TAG = "SOLO SESSION"
-
-    }
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.exitSessionButton -> confirmExit()
@@ -286,7 +293,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private fun showNotification(title: String, message: String) {
         val channelID = "${context!!.packageName} - StudyPal"
         val mNotificationManager = activity!!.getSystemService( Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelID,
                 "StudyPal",
                 NotificationManager.IMPORTANCE_HIGH)
@@ -301,5 +308,60 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             .setAutoCancel(true) // clear notification after click
         mBuilder.setAutoCancel(true)
         mNotificationManager.notify(0, mBuilder.build())
+    }
+    private fun playFromSpotify () {
+        spotifyAppRemote?.let {
+            Log.d(TAG, "in let")
+            // Play a playlist
+            val playlistURI = "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8" //37i9dQZF1DX2sUQwD7tbmL"
+            it.playerApi.play(playlistURI)
+            // Subscribe to PlayerState
+            it.playerApi.subscribeToPlayerState().setEventCallback {
+                val track: Track = it.track
+                Log.d(TAG, track.name + " by " + track.artist.name)
+            }
+        }
+
+    }
+
+    private fun initSpotify () {
+        val CLIENT_ID = "bee89f0e61db4516ab215e7fa380df62" // StudyPal client ID
+        val REDIRECT_URI = "http://com.example.studypal/callback/"
+        Log.d(TAG,"initSpotify")
+        // Set the connection parameters
+        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+            .setRedirectUri(REDIRECT_URI)
+            .showAuthView(true)
+            .build()
+
+        SpotifyAppRemote.connect( context, connectionParams,
+            object : Connector.ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    spotifyAppRemote = appRemote
+                    Log.d(TAG, "Connected! Yay!")
+                    // Now you can start interacting with App Remote
+                    playFromSpotify()
+                }
+                override fun onFailure(throwable: Throwable) {
+                    Log.d(TAG, throwable.message, throwable)
+                    // Something went wrong when attempting to connect! Handle errors here
+                    // TODO log in to spotify
+                }
+            })
+    }
+    companion object {
+        private const val CAMERA_PERMISSION_REQUEST_CODE = 1
+        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
+        private const val TAG = "SOLO-SESSION"
+
+    }
+    inner  class BackgroundSound : AsyncTask<Void, Void, Void>() {
+        override fun doInBackground(vararg params: Void): Void? {
+            val player = MediaPlayer.create(activity, R.raw.piano_theme)
+            player.isLooping = true // Set looping
+            player.setVolume(1.0f, 1.0f)
+            player.start()
+            return null
+        }
     }
 }
