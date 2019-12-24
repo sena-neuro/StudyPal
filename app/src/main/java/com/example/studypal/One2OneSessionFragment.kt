@@ -2,7 +2,9 @@ package com.example.studypal
 
 import android.Manifest
 import android.app.AlertDialog
+import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,8 +23,11 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.opentok.android.*
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.fragment_one2_one_session.*
 import org.json.JSONException
 import pub.devrel.easypermissions.EasyPermissions
@@ -38,13 +43,19 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
     private val sessionType:String = "One2One"
     private var mPublisher: Publisher? = null
     private var navController: NavController? = null
-    val args: SoloSessionFragmentArgs by navArgs()
+    val args: One2OneSessionFragmentArgs by navArgs()
     private var mPublisherViewContainer: FrameLayout? = null
     private var mSubscriberViewContainer: FrameLayout? = null
     private var mSubscriber: Subscriber? = null
     private var inSession = false
     private var totalMinsInSession: Long = 0
     private var sessionCount = 0
+    private lateinit var mBackgroundSound: BackgroundSound
+    private var spotifyAppRemote : SpotifyAppRemote? = null
+    val spotifyMusic : Boolean
+        get() {
+            return args.backgroundMusic.contains("Spotify")
+        }
     private var firstTimeFlag = true
     private var remainingMinutes: Long=0
     private val sessionViewModel: SessionViewModel by lazy {
@@ -113,6 +124,7 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mBackgroundSound = BackgroundSound()
         sessionViewModel.milisChangeNotifier.observe(this, milisChangeObserver)
         sessionViewModel.onSession.observe(this, sessionObserver)
         sessionViewModel.remainingSessionCount.observe(this, remainingSessionObserver)
@@ -121,6 +133,65 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
             // Handle the back button
             confirmExit()
         }
+    }
+    override fun onStop() {
+        super.onStop()
+        if(spotifyMusic) {
+            spotifyAppRemote?.let {
+                SpotifyAppRemote.disconnect(it)
+            }
+        }
+    }
+    override fun onPause() {
+        mBackgroundSound.cancel(true)
+        super.onPause()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(spotifyMusic)
+            initSpotify()
+    }
+
+    private fun playFromSpotify () {
+        spotifyAppRemote?.let {
+            Log.d(LOG_TAG, "in let")
+            // Play a playlist
+            val playlistURI = "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8" //37i9dQZF1DX2sUQwD7tbmL"
+            it.playerApi.play(playlistURI)
+            // Subscribe to PlayerState
+            it.playerApi.subscribeToPlayerState().setEventCallback {
+                val track: Track = it.track
+                Log.d(LOG_TAG, track.name + " by " + track.artist.name)
+            }
+        }
+
+    }
+
+    private fun initSpotify () {
+        val CLIENT_ID = "bee89f0e61db4516ab215e7fa380df62" // StudyPal client ID
+        val REDIRECT_URI = "http://com.example.studypal/callback/"
+        Log.d(LOG_TAG,"initSpotify")
+        // Set the connection parameters
+        val connectionParams = ConnectionParams.Builder(CLIENT_ID)
+            .setRedirectUri(REDIRECT_URI)
+            .showAuthView(true)
+            .build()
+
+        SpotifyAppRemote.connect( context, connectionParams,
+            object : Connector.ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    spotifyAppRemote = appRemote
+                    Log.d(LOG_TAG, "Connected! Yay!")
+                    // Now you can start interacting with App Remote
+                    playFromSpotify()
+                }
+                override fun onFailure(throwable: Throwable) {
+                    Log.d(LOG_TAG, throwable.message, throwable)
+                    // Something went wrong when attempting to connect! Handle errors here
+                    // TODO log in to spotify
+                }
+            })
     }
 
     override fun onCreateView(
@@ -141,8 +212,6 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
         val sMilis = args.sessionMins
         sessionViewModel.createTimers(sessionCount, sMilis, bMilis)
         navController = Navigation.findNavController(view)
-        val exitButton =
-            activity!!.findViewById<FloatingActionButton>(R.id.exitOne2OneSessionButton)
         requestPermissions()
         exitOne2OneSessionButton.setOnClickListener(this)
     }
@@ -288,7 +357,13 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
         private val RC_SETTINGS_SCREEN_PERM = 123
         private val RC_VIDEO_APP_PERM = 124
     }
-    interface LoadingImplementation {
-        fun onFinishedLoading()
+    inner  class BackgroundSound : AsyncTask<Void, Void, Void>() {
+        override fun doInBackground(vararg params: Void): Void? {
+            val player = MediaPlayer.create(activity, R.raw.piano_theme)
+            player.isLooping = true // Set looping
+            player.setVolume(1.0f, 1.0f)
+            player.start()
+            return null
+        }
     }
 }// Required empty public constructor
