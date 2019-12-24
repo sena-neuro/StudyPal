@@ -57,6 +57,17 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         get() {
             return args.backgroundMusic.contains("Spotify")
         }
+    val playlistURI : String
+        get() {
+            if( args.backgroundMusic.contains("Apply") ) {
+                return "spotify:playlist:37i9dQZF1DXe1cC3XInKct"
+            }
+            else if (args.backgroundMusic.contains("Instrumental")) {
+                return "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8"
+            }
+            return ""
+        }
+
     private lateinit var navController: NavController
     private var inSession: Boolean = false
     private var totalMinsInSession:Long = 0
@@ -275,12 +286,12 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     }
 
     private fun closeCall(){
-        // TODO stop webrtc
         sessionViewModel.closeCall()
         if(inSession){
             val mins = TimeUnit.MILLISECONDS.toMinutes(milis)
             totalMinsInSession = totalMinsInSession + args.sessionMins - mins
         }
+        stopMusic()
         val action = SoloSessionFragmentDirections.
             actionSoloSessionFragmentToEndSessionFragment(inSession, totalMinsInSession, args.sessionMins.toInt(), sessionCount, args.breakMins.toInt(), sessionType)
         navController.navigate(action)
@@ -313,7 +324,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         spotifyAppRemote?.let {
             Log.d(TAG, "in let")
             // Play a playlist
-            val playlistURI = "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8" //37i9dQZF1DX2sUQwD7tbmL"
+            //val playlistURI = "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8" //37i9dQZF1DX2sUQwD7tbmL" // 37i9dQZF1DXe1cC3XInKct
             it.playerApi.play(playlistURI)
             // Subscribe to PlayerState
             it.playerApi.subscribeToPlayerState().setEventCallback {
@@ -322,6 +333,14 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             }
         }
 
+    }
+
+    private fun stopMusic( ) {
+        spotifyAppRemote?.let {
+            Log.d(TAG, "in let stop music")
+            it.playerApi.pause()
+            // Subscribe to PlayerState
+        }
     }
 
     private fun initSpotify () {
