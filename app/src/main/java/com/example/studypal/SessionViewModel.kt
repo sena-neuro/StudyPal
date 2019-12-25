@@ -16,9 +16,7 @@ class SessionViewModel() : ViewModel(), LifecycleObserver {
     private var _remainingSession : Int = 5
     private var _sessionMinutes : Long = 25
     private var _breakMinutes : Long = 5
-
-    private var flag = true
-
+    var flag = true
     val remainingSessionCount  = MutableLiveData<Int>()
     val milisChangeNotifier = MutableLiveData<Long>()
     val onSession = MutableLiveData<Boolean>()
@@ -65,6 +63,5 @@ class SessionViewModel() : ViewModel(), LifecycleObserver {
         sessionCountDownTimer.cancel()
         breakCountDownTimer.cancel()
     }
-
 
 }

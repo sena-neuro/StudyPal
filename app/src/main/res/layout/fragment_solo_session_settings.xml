@@ -8,11 +8,11 @@
         tools:context=".SoloSessionSettingsFragment">
 
     <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/startSoloSessionButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
                     android:id="@+id/sessionMinutesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/default_study_session_minutes"
+                    android:layout_marginEnd="8dp"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/sessionMinutesSeekBar"
@@ -89,14 +89,13 @@
                     android:id="@+id/breakMinutesTextView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:text="@string/default_break_minutes"
+                    android:layout_marginEnd="8dp"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/breakMinutesSeekBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/breakMinutesSeekBar"
-                    app:layout_constraintTop_toBottomOf="@+id/minutesInBreakText"
-                    tools:layout_editor_absoluteX="1dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/minutesInBreakText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -119,9 +118,9 @@
 
             <TextView
                     android:id="@+id/sessionCountTextView"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:text="@string/number_of_sessions_number"
+                    android:layout_marginEnd="8dp"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="@+id/sessionCountSeekBar"
@@ -160,7 +159,7 @@
                     android:layout_height="22dp"
                     android:layout_marginBottom="24dp"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/background_music_textview" />

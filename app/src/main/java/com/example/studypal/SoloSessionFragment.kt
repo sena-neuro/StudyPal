@@ -67,7 +67,10 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
             }
             return ""
         }
-
+    val offlineMusic : Boolean
+        get(){
+            return  args.backgroundMusic.contains("Offline")
+        }
     private lateinit var navController: NavController
     private var inSession: Boolean = false
     private var totalMinsInSession:Long = 0
@@ -79,7 +82,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     }
     private val milisChangeObserver = Observer<Long> {
         value -> value?.let{displayTime(value)
-        milis= value}
+        milis = value}
     }
     private val sessionObserver = Observer<Boolean> {
         value -> value?.let{
@@ -118,7 +121,6 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    mBackgroundSound = BackgroundSound()
     Log.d(TAG,spotifyMusic.toString())
         // This callback will only be called when MyFragment is at least Started.
     // Create a ViewModel the first time the system calls an activity's onCreate() method.
@@ -215,7 +217,8 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         }
     }
     override fun onPause() {
-        mBackgroundSound.cancel(true)
+        if(offlineMusic)
+            mBackgroundSound.cancel(true)
         super.onPause()
     }
 
@@ -223,6 +226,9 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         super.onStart()
         if(spotifyMusic)
             initSpotify()
+        else if (offlineMusic)
+            mBackgroundSound = BackgroundSound()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -288,7 +294,7 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
     private fun closeCall(){
         sessionViewModel.closeCall()
         if(inSession){
-            val mins = TimeUnit.MILLISECONDS.toMinutes(milis)
+            val mins = TimeUnit.MILLISECONDS.toSeconds(milis) //TimeUnit.MILLISECONDS.toMinutes(milis)
             totalMinsInSession = totalMinsInSession + args.sessionMins - mins
         }
         stopMusic()
@@ -334,15 +340,13 @@ class SoloSessionFragment : Fragment(), View.OnClickListener {
         }
 
     }
-
-    private fun stopMusic( ) {
+    private fun stopMusic(){
         spotifyAppRemote?.let {
             Log.d(TAG, "in let stop music")
             it.playerApi.pause()
             // Subscribe to PlayerState
         }
     }
-
     private fun initSpotify () {
         val CLIENT_ID = "bee89f0e61db4516ab215e7fa380df62" // StudyPal client ID
         val REDIRECT_URI = "http://com.example.studypal/callback/"

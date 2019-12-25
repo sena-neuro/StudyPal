@@ -11,7 +11,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true" />
+            app:lottie_loop="true"
+            android:visibility="invisible"/>
 
     <TextView
             android:id="@+id/findingPalTextView"
@@ -20,7 +21,8 @@
             android:layout_marginTop="64dp"
             android:text="Trying to find your study pal."
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="invisible"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

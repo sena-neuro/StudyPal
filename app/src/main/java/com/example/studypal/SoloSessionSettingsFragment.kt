@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.fragment_solo_session_settings.*
 
 
@@ -39,8 +40,6 @@ class SoloSessionSettingsFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -105,6 +104,15 @@ class SoloSessionSettingsFragment : Fragment(), View.OnClickListener {
             override fun onNothingSelected(adapterView: AdapterView<*>) {
             }
         }
+        var prefs = PreferenceManager.getDefaultSharedPreferences(activity).all
+        val sessionMinsDef = prefs["default_study_session_minutes"]
+        val breakMinsDef = prefs["default_break_minutes"]
+        breakMinutesTextView.text = breakMinsDef.toString()
+        sessionMinutesTextView.text = sessionMinsDef.toString()
+        breakMinutesSeekBar.setProgress(breakMinsDef.toString().toInt())
+        sessionMinutesSeekBar.setProgress(sessionMinsDef.toString().toInt())
+        Log.d(TAG, sessionMinsDef.toString())
+        Log.d(TAG, breakMinsDef.toString())
     }
 
     fun installSpotify() {
@@ -139,7 +147,7 @@ class SoloSessionSettingsFragment : Fragment(), View.OnClickListener {
                     navController.navigate(action)
                 }
                 else{
-                    val action = SoloSessionSettingsFragmentDirections.actionSoloSessionSettingsFragmentToOne2OneSessionFragment(breakMins,sesionCount,sessionMins)
+                    val action = SoloSessionSettingsFragmentDirections.actionSoloSessionSettingsFragmentToOne2OneSessionFragment(breakMins,sesionCount,sessionMins, backgroundMusic)
                     navController.navigate(action)
                 }
             }

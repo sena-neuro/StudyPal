@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit
  */
 class One2OneSessionFragment: Fragment(), Session.SessionListener,
     PublisherKit.PublisherListener, View.OnClickListener {
-
+    private var connected:Boolean = false
     private var mSession: Session? = null
     private val sessionType:String = "One2One"
     private var mPublisher: Publisher? = null
@@ -56,13 +57,19 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
         get() {
             return args.backgroundMusic.contains("Spotify")
         }
+    val offlineMusic : Boolean
+    get(){
+        return  args.backgroundMusic.contains("Offline")
+    }
+
     private var firstTimeFlag = true
-    private var remainingMinutes: Long=0
+    private var remainingMilis: Long=0
     private val sessionViewModel: SessionViewModel by lazy {
         ViewModelProviders.of(this).get(SessionViewModel::class.java)
     }
     private val milisChangeObserver =
-        Observer<Long> { milisRemaining -> displayTime(milisRemaining) }
+        Observer<Long> { milisRemaining -> displayTime(milisRemaining)
+            remainingMilis = milisRemaining}
     private val sessionObserver = Observer<Boolean> { onSession ->
         if (onSession) {
             firstTimeFlag = false
@@ -82,9 +89,18 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
             closeCall()
         }
     }
-
+    val playlistURI : String
+        get() {
+            if( args.backgroundMusic.contains("Apply") ) {
+                return "spotify:playlist:37i9dQZF1DXe1cC3XInKct"
+            }
+            else if (args.backgroundMusic.contains("Instrumental")) {
+                return "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8"
+            }
+            return ""
+        }
     private fun displayTime(milisRemaining: Long?) {
-        remainingMinutes = TimeUnit.MILLISECONDS.toMinutes(milisRemaining!!)
+        val remainingMinutes = TimeUnit.MILLISECONDS.toMinutes(milisRemaining!!)
         val remainingSeconds =
             TimeUnit.MILLISECONDS.toSeconds(milisRemaining) - TimeUnit.MINUTES.toSeconds(
                 remainingMinutes
@@ -134,30 +150,18 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
             confirmExit()
         }
     }
-    override fun onStop() {
-        super.onStop()
-        if(spotifyMusic) {
-            spotifyAppRemote?.let {
-                SpotifyAppRemote.disconnect(it)
-            }
-        }
-    }
-    override fun onPause() {
-        mBackgroundSound.cancel(true)
-        super.onPause()
-    }
-
     override fun onStart() {
         super.onStart()
         if(spotifyMusic)
             initSpotify()
+        else if(offlineMusic)
+            mBackgroundSound.execute(null)
     }
 
     private fun playFromSpotify () {
         spotifyAppRemote?.let {
             Log.d(LOG_TAG, "in let")
             // Play a playlist
-            val playlistURI = "spotify:playlist:37i9dQZF1DX9sIqqvKsjG8" //37i9dQZF1DX2sUQwD7tbmL"
             it.playerApi.play(playlistURI)
             // Subscribe to PlayerState
             it.playerApi.subscribeToPlayerState().setEventCallback {
@@ -167,6 +171,7 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
         }
 
     }
+
 
     private fun initSpotify () {
         val CLIENT_ID = "bee89f0e61db4516ab215e7fa380df62" // StudyPal client ID
@@ -205,6 +210,8 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         constraintLayoutOne2OneSession.visibility = View.GONE
+        findingPalTextView.visibility = View.VISIBLE
+        finding_pal_animation_view.visibility = View.VISIBLE
         finding_pal_animation_view.setAnimation(R.raw.findingpal)
         finding_pal_animation_view.playAnimation()
         val bMilis =args.breakMins
@@ -247,7 +254,19 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
             )
         }
     }
+    private fun stopMusic() {
+        if(spotifyMusic){
+            spotifyAppRemote?.let {
+                Log.d(LOG_TAG, "in let stop music")
+                it.playerApi.pause()
+                // Subscribe to PlayerState
+            }
+        }
+        else{
+            mBackgroundSound.cancel(true)
+        }
 
+    }
     private fun confirmExit() {
         // Use the Builder class for convenient dialog construction
         val builder = AlertDialog.Builder(activity)
@@ -268,9 +287,15 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
     private fun closeCall() {
         Log.d(LOG_TAG, "Close Call")
         sessionViewModel.closeCall()
+        if(connected)
+            mSession!!.disconnect()
+        stopMusic()
         if (inSession) {
-            totalMinsInSession += remainingMinutes
-            Log.d("Mins:", remainingMinutes.toString())
+            totalMinsInSession = totalMinsInSession + args.sessionMins - TimeUnit.MILLISECONDS.toSeconds(remainingMilis)
+        }
+        else if (firstTimeFlag)
+        {
+            totalMinsInSession = 0
         }
         Log.d("Totalmins",totalMinsInSession.toString())
         val sessionMins = args.sessionMins
@@ -286,6 +311,7 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
         navController!!.navigate(action)
     }
 
+
     //SessionListener methods
     override fun onConnected(session: Session) {
         Log.i(LOG_TAG, "Session Connected")
@@ -300,6 +326,7 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
             (mPublisher!!.view as GLSurfaceView).setZOrderOnTop(true)
         }
         mSession!!.publish(mPublisher)
+        connected = true
     }
 
     override fun onDisconnected(session: Session) {
@@ -325,6 +352,10 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
         if (mSubscriber != null) {
             mSubscriber = null
             mSubscriberViewContainer!!.removeAllViews()
+            mPublisherViewContainer!!.removeAllViews()
+            mSubscriberViewContainer!!.addView(mPublisher!!.view)
+            mPublisherViewContainer!!.visibility = View.GONE
+            Toast.makeText(context, "Your Study Pal Has Left The Session, You Can Continue Working.", Toast.LENGTH_SHORT)
         }
     }
 
@@ -339,6 +370,7 @@ class One2OneSessionFragment: Fragment(), Session.SessionListener,
 
     override fun onStreamDestroyed(publisherKit: PublisherKit, stream: Stream) {
         Log.i(LOG_TAG, "Publisher onStreamDestroyed")
+        mPublisherViewContainer!!.removeAllViews()
     }
 
     override fun onError(publisherKit: PublisherKit, opentokError: OpentokError) {
