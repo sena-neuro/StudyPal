@@ -1,26 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".One2OneSessionFragment">
-    <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+
+    <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/finding_pal_animation_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:visibility="invisible"/>
+
+    <TextView
+            android:id="@+id/findingPalTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="Trying to find your study pal."
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="invisible"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/constraintLayoutOne2OneSession">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/exitOne2OneSessionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="276dp"
+                android:layout_marginBottom="32dp"
+                android:src="@android:drawable/ic_media_pause"
+                app:layout_constraintBottom_toBottomOf="@+id/subscriber_container"
+                app:layout_constraintEnd_toEndOf="@+id/subscriber_container"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+                android:id="@+id/timeLeftTextView"
+                android:layout_width="166dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="TIME LEFT"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+                android:id="@+id/stateTextView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="STATE TEXT"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="@+id/timeLeftTextView"
+                app:layout_constraintEnd_toStartOf="@+id/timeLeftTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/timeLeftTextView" />
+
         <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/subscriber_container" />
+                android:id="@+id/subscriber_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stateTextView">
+
+        </FrameLayout>
+
         <FrameLayout
+                android:id="@+id/publisher_container"
                 android:layout_width="90dp"
                 android:layout_height="120dp"
-                android:id="@+id/publisher_container"
                 android:layout_gravity="bottom|end"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
+                android:background="#FFFFFF"
                 android:padding="2dp"
-                android:background="#FFFFFF" />
-    </FrameLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/subscriber_container">
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

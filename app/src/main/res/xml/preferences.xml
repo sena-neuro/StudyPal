@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <EditTextPreference
+        app:key="default_study_session_minutes"
+        app:title="Default study session minutes"
+        app:summary="Click to change"
+        app:defaultValue="25"
+        app:isPreferenceVisible="true"
+        app:allowDividerAbove="true"/>
+
+    <EditTextPreference
+            app:allowDividerBelow="true"
+            app:defaultValue="5"
+            app:key="default_break_minutes"
+            app:summary="Click to change"
+            app:title="Default break minutes" />
+
     <SwitchPreferenceCompat
-        app:key="Hmm"
-        app:title="Hmm"/>
+            app:key="spotify"
+            app:summary="Connect to Spotify to enhance your focus with Spotify playlists!"
+            app:title="Connect to Spotify"
+            app:allowDividerAbove="true"/>
 
     <Preference
         app:key="version"
         app:title="Build version"
-        app:summary="0.0.0"/>
+        app:summary="1.0.0"/>
 
 </PreferenceScreen>

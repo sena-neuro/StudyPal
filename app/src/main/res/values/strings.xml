@@ -33,8 +33,14 @@
     <string name="session_text">In Session</string>
     <string name="timer_text">%d:%d</string>
     <string name="solo_session">Solo Session</string>
-    <string name="minutes_in_break">Minutes in Break</string>
-    <string name="minites_in_session">Minites in Session</string>
+    <string name="minutes_in_break">Break length in minutes</string>
+    <string name="minutes_in_session">Study session length in minutes</string>
     <string name="okay">Okay!</string>
     <string name="you_have_studied_for_minutes_congratulations">You have studied for ... minutes. Congratulations.</string>
+    <string name="one_to_one_session">One to One Session</string>
+    <string name="default_break_minutes">5</string>
+    <string name="default_study_session_minutes">25</string>
+    <string name="background_music">Background music</string>
+    <string name="number_of_sessions">Number of Sessions</string>
+    <string name="number_of_sessions_number">3</string>
 </resources>

@@ -46,8 +46,19 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
     override fun onClick(v:View){
         val i = v.id
-        when (i) {R.id.soloSessionSettingsButton -> navController.navigate(R.id.action_navigation_home_to_soloSessionSettingsFragment)
-            R.id.one2OneSessionButton -> navController.navigate(R.id.action_navigation_home_to_one2OneSessionFragment)
+        when (i) {
+
+            R.id.soloSessionSettingsButton -> {
+                val sessionType = "Solo"
+                val action = HomeFragmentDirections.actionNavigationHomeToSoloSessionSettingsFragment(sessionType)
+                navController.navigate(action)
+            }
+
+            R.id.one2OneSessionButton -> {
+                val sessionType = "One2One"
+                val action = HomeFragmentDirections.actionNavigationHomeToSoloSessionSettingsFragment(sessionType)
+                navController.navigate(action)
+            }
         }
     }
     companion object {

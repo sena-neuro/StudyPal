@@ -7,20 +7,16 @@ import androidx.lifecycle.ViewModel
 
 
 class SessionViewModel() : ViewModel(), LifecycleObserver {
-
-
     companion object {
         private const val ONE_SECOND = 1000 //0 // 1000 milliseconds
-        private const val ONE_MINUTE = 60 // 60 seconds
+        private const val ONE_MINUTE = 1 // 60 seconds
     }
     private lateinit var sessionCountDownTimer: CountDownTimer
     private lateinit var breakCountDownTimer: CountDownTimer
     private var _remainingSession : Int = 5
     private var _sessionMinutes : Long = 25
     private var _breakMinutes : Long = 5
-
-    private var flag = true
-
+    var flag = true
     val remainingSessionCount  = MutableLiveData<Int>()
     val milisChangeNotifier = MutableLiveData<Long>()
     val onSession = MutableLiveData<Boolean>()
@@ -53,16 +49,19 @@ class SessionViewModel() : ViewModel(), LifecycleObserver {
                     sessionCountDownTimer.start()
                 }
             }
+        }
+    }
+    fun startTimers(){
+        if(flag){
             sessionCountDownTimer.start()
             flag = false
         }
     }
+
     //@OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    //fun onPause() { closeCall() }
     fun closeCall(){
         sessionCountDownTimer.cancel()
         breakCountDownTimer.cancel()
     }
-
 
 }
